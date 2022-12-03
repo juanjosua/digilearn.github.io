@@ -132,7 +132,7 @@
 
     const sendQuestions = () => {
 
-      postQuestion('http://165.22.107.85/api/questions/new', {
+      postQuestion('https://content-management.my.id/api/questions/new', {
         question: document.getElementById('questions').value,
         username: localStorage.getItem('username'),
         fullname: localStorage.getItem('fullname'),

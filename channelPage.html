@@ -289,7 +289,7 @@
 
   <script type="text/javascript">
     //TODO: backendurl = "https://digilearn-webadmin.adira-corpu.com";
-    backendurl = "http://165.22.107.85";
+    backendurl = "https://content-management.my.id";
 
     var loadingOverlay = document.querySelector('.loading');
     function toggleLoading(event) {
@@ -330,7 +330,7 @@
     function Init() {
       toggleLoading();
       //TODO: webservicesurl = "https://digilearn.adira-corpu.com/";
-      webservicesurl = "http://165.22.107.85/";
+      webservicesurl = "https://content-management.my.id/";
 
       pages = ['home'];//0
       pages.push("home");//1
@@ -369,7 +369,7 @@
     let content_id = localStorage.getItem('content_id');
     toggleLoading();
     // let content_id = 1059;
-    fetch(`http://165.22.107.85/api/tags?content_id=${content_id}`)
+    fetch(`https://content-management.my.id/api/tags?content_id=${content_id}`)
       .then((response) => response.json())
       .then((data) => {
         data.forEach(d => {
@@ -387,7 +387,7 @@
     }
 
     const updateLike = () => {
-      fetch(`http://165.22.107.85/api/content_info?content_id=${content_id}`)
+      fetch(`https://content-management.my.id/api/content_info?content_id=${content_id}`)
         .then((response) => response.json())
         .then((data) => {
           document.getElementById('like_counter').innerText = data[0].likes;
@@ -430,7 +430,7 @@
       let username = localStorage.getItem('username');
       let fullname = localStorage.getItem('fullname');
 
-      fetch(`http://165.22.107.85/api/like?content_id=${content_id}&username=${username}&fullname=${fullname}&like=${like}`)
+      fetch(`https://content-management.my.id/api/like?content_id=${content_id}&username=${username}&fullname=${fullname}&like=${like}`)
         .then((response) => response.json())
         .then((data) => {
           // console.log(data);
@@ -448,7 +448,7 @@
 
       const data = { comment: comment, content_id: content_id, username: username, fullname: fullname };
 
-      fetch('http://165.22.107.85/api/comment', {
+      fetch('https://content-management.my.id/api/comment', {
         method: 'POST',
         mode: 'cors',
         headers: {

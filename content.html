@@ -141,7 +141,7 @@
 
   <script type="text/javascript">
     //TODO: backendurl = "https://digilearn-webadmin.adira-corpu.com";
-    backendurl = "http://165.22.107.85";
+    backendurl = "https://content-management.my.id";
 
     const findParam = (param) => {
       const queryString = window.location.search;
@@ -217,7 +217,7 @@
         `;
       }
 
-      fetch(`http://165.22.107.85/api/allContents?content_type_id=${content_type_id}`)
+      fetch(`https://content-management.my.id/api/allContents?content_type_id=${content_type_id}`)
         .then((response) => response.json())
         .then((data) => {
           if (data.length > 0) {
@@ -275,7 +275,7 @@
         content_type_id = 2;
       }
 
-      fetch(`http://165.22.107.85/api/allContents?content_type_id=${content_type_id}&keyword=${keyword}`)
+      fetch(`https://content-management.my.id/api/allContents?content_type_id=${content_type_id}&keyword=${keyword}`)
         .then((response) => response.json())
         .then((data) => {
           console.log(data.length)

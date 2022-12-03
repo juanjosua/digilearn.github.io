@@ -162,7 +162,7 @@
 
     const sendQuestions = (nik, fullname, jabatan) => {
 
-      postQuestion('http://165.22.107.85/api/send_chat', {
+      postQuestion('https://content-management.my.id/api/send_chat', {
         receiver: localStorage.getItem('username'),
         sender: nik,
         message: "Selamat sore, selamat datang di Ask The Expert. Ada yang dapat saya bantu?",
@@ -195,13 +195,13 @@
     }
 
     const loadProfile = (nik) => {
-      fetch(`http://165.22.107.85/api/profile?username=${nik}`)
+      fetch(`https://content-management.my.id/api/profile?username=${nik}`)
         .then((response) => response.json())
         .then((data) => {
           document.getElementById('efullname').innerText = data.fullname;
           document.getElementById('enik').innerText = data.nik;
           document.getElementById('ejabatan').innerText = data.jabatan;
-          document.getElementById('profpic').src = data.photo ?? 'http://165.22.107.85/img/default/avatar.png';
+          document.getElementById('profpic').src = data.photo ?? 'https://content-management.my.id/img/default/avatar.png';
 
           let now = new Date();
           let start = new Date(Date.parse(`${data.online_time_start}`.replace(/-/g, '/')))

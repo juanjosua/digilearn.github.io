@@ -141,7 +141,7 @@
         document.getElementById('top-point').innerHTML = '';
 
         // populate earnings
-        fetch(`http://165.22.107.85/api/earnings?username=${localStorage.getItem("username")}&filter=${filter}&value=${value}`)
+        fetch(`https://content-management.my.id/api/earnings?username=${localStorage.getItem("username")}&filter=${filter}&value=${value}`)
           .then((response) => response.json())
           .then((data) => {
             if (data.length == 0) {
@@ -203,7 +203,7 @@
         document.getElementById('top-point').innerHTML = '';
 
         // populate earnings
-        fetch(`http://165.22.107.85/api/earnings?username=${localStorage.getItem("username")}`)
+        fetch(`https://content-management.my.id/api/earnings?username=${localStorage.getItem("username")}`)
           .then((response) => response.json())
           .then((data) => {
             data.forEach((value, index) => {
@@ -239,7 +239,7 @@
         document.getElementById('top-ten').innerHTML = '';
 
         // populate leaderboard
-        fetch('http://165.22.107.85/api/point10')
+        fetch('https://content-management.my.id/api/point10')
           .then((response) => response.json())
           .then((data) => {
             data.forEach((value, index) => {
@@ -282,7 +282,7 @@
           }
 
           // populate owned rank and points
-          fetch(`http://165.22.107.85/api/point1?username=${localStorage.getItem("username")}`)
+          fetch(`https://content-management.my.id/api/point1?username=${localStorage.getItem("username")}`)
             .then((response) => response.json())
             .then((data) => {
               document.getElementById('peringkat').innerText = data.rank + 1;
@@ -290,7 +290,7 @@
             });
 
           // populate leaderboard
-          fetch('http://165.22.107.85/api/point10')
+          fetch('https://content-management.my.id/api/point10')
             .then((response) => response.json())
             .then((data) => {
               if (data.length == 0) {
@@ -362,7 +362,7 @@
             });
 
           // populate earnings
-          fetch(`http://165.22.107.85/api/earnings?username=${localStorage.getItem("username")}`)
+          fetch(`https://content-management.my.id/api/earnings?username=${localStorage.getItem("username")}`)
             .then((response) => response.json())
             .then((data) => {
               data.forEach((value, index) => {

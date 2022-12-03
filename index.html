@@ -378,7 +378,7 @@
       }
 
       const getMostLikesContent = () => {
-        fetch(`http://165.22.107.85/api/most_like`)
+        fetch(`https://content-management.my.id/api/most_like`)
           .then((response) => response.json())
           .then((data) => {
             // console.log(data);
@@ -521,7 +521,7 @@
 
   <script type="text/javascript">
     //TODO: backendurl = "https://digilearn-webadmin.adira-corpu.com";
-    backendurl = "http://165.22.107.85";
+    backendurl = "https://content-management.my.id";
 
     if (!localStorage.getItem("token")) {
       window.location.replace("login.html");
@@ -549,7 +549,7 @@
 
     function Init() {
       //TODO: webservicesurl = "https://digilearn.adira-corpu.com/";
-      webservicesurl = "http://165.22.107.85/";
+      webservicesurl = "https://content-management.my.id/";
 
       pages = ['home'];//0
       pages.push("home");//1

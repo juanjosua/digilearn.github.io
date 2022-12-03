@@ -114,13 +114,13 @@
     };
 
     const loadExperts = (topic) => {
-      fetch(`http://165.22.107.85/api/experts?topic=${topic}`)
+      fetch(`https://content-management.my.id/api/experts?topic=${topic}`)
         .then((response) => response.json())
         .then((data) => {
           data.forEach(d => {
             document.getElementById('square-grid').innerHTML += `
             <div class="card" onclick="askPage(${d.id});">
-              <img src="${d.photo ?? 'http://165.22.107.85/img/default/avatar.png'}" class="card-img-top" alt="Expert Photo" style="height: 100%;">
+              <img src="${d.photo ?? 'https://content-management.my.id/img/default/avatar.png'}" class="card-img-top" alt="Expert Photo" style="height: 100%;">
               <div class="card-body">
                 <h5 class="card-title">${d.fullname}</h5>
                 <p class="card-text">${d.nik}</p>

@@ -178,7 +178,7 @@
       let keyword = document.getElementById('searchbox').value;
 
       // load top questions
-      fetch(`http://165.22.107.85/api/helpdigilearn/search?keyword=${encodeURIComponent(keyword)}`)
+      fetch(`https://content-management.my.id/api/helpdigilearn/search?keyword=${encodeURIComponent(keyword)}`)
         .then((response) => response.json())
         .then((data) => {
           if (data.length > 0) {
@@ -215,7 +215,7 @@
       let keyword = id;
 
       // load top questions
-      fetch(`http://165.22.107.85/api/helpdigilearn/search/channel?channel=${encodeURIComponent(keyword)}`)
+      fetch(`https://content-management.my.id/api/helpdigilearn/search/channel?channel=${encodeURIComponent(keyword)}`)
         .then((response) => response.json())
         .then((data) => {
           if (data.length > 0) {
@@ -246,7 +246,7 @@
 
     const add_counter = (id, answer) => {
       document.getElementById('modal-answer').innerText = answer;
-      fetch(`http://165.22.107.85/api/faq/counter?id=${id}`)
+      fetch(`https://content-management.my.id/api/faq/counter?id=${id}`)
         .then((response) => response.json())
         .then((data) => {
           //
@@ -262,7 +262,7 @@
         document.getElementById('top-questions').innerHTML = `<div class='w-100 d-flex justify-content-center align-items-center'>Searching...</div>`;
 
         // load top questions
-        fetch(`http://165.22.107.85/api/general_top_questions`)
+        fetch(`https://content-management.my.id/api/general_top_questions`)
           .then((response) => response.json())
           .then((data) => {
             document.getElementById('top-questions').innerHTML = "";
@@ -280,7 +280,7 @@
           });
 
         // load topics
-        fetch(`http://165.22.107.85/api/faq_topics`)
+        fetch(`https://content-management.my.id/api/faq_topics`)
           .then((response) => response.json())
           .then((data) => {
             document.getElementById('channel').innerHTML = "";

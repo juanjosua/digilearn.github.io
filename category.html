@@ -121,13 +121,13 @@
 
     const loadExperts = (category) => {
       document.getElementById('category-title').innerText = category;
-      fetch(`http://165.22.107.85/api/experts?category=${category}`)
+      fetch(`https://content-management.my.id/api/experts?category=${category}`)
         .then((response) => response.json())
         .then((data) => {
           data.forEach(d => {
             document.getElementById('square-grid').innerHTML +=
               `<div class="text-center">
-                  <img src="${d.photo ?? 'http://165.22.107.85/img/default/avatar.png'}"
+                  <img src="${d.photo ?? 'https://content-management.my.id/img/default/avatar.png'}"
                       alt="" width="73px">
                   <div class="text-center"><a href="profile.html?username=${d.nik}&expert_id=${d.id}&topic=${category}">${d.fullname}</a></div>
               </div>`;
@@ -136,7 +136,7 @@
     };
 
     const loadQuestions = (category) => {
-      fetch(`http://165.22.107.85/api/questions?username=${localStorage.getItem('username')}&category=${category}`)
+      fetch(`https://content-management.my.id/api/questions?username=${localStorage.getItem('username')}&category=${category}`)
         .then((response) => response.json())
         .then((data) => {
           if (data.length == 0) {

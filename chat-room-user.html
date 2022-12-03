@@ -117,7 +117,7 @@
 
     const sendMessage = () => {
 
-      postQuestion('http://165.22.107.85/api/send_chat', {
+      postQuestion('https://content-management.my.id/api/send_chat', {
         receiver: interlocutors,
         sender: localStorage.getItem('username'),
         message: document.getElementById('message').value,
@@ -132,12 +132,12 @@
     };
 
     const loadProfile = () => {
-      fetch(`http://165.22.107.85/api/profile?username=${interlocutors}`)
+      fetch(`https://content-management.my.id/api/profile?username=${interlocutors}`)
         .then((response) => response.json())
         .then((data) => {
           document.getElementById('fullname').innerText = data.fullname;
           document.getElementById('jabatan').innerText = data.jabatan;
-          document.getElementById('profpic').src = data.photo ?? 'http://165.22.107.85/img/default/avatar.png';
+          document.getElementById('profpic').src = data.photo ?? 'https://content-management.my.id/img/default/avatar.png';
         });
     };
 
@@ -155,7 +155,7 @@
 
       let msg_id = 0;
       setInterval(() => {
-        fetch(`http://165.22.107.85/api/retrieve_chat?receiver=${interlocutors}&sender=${localStorage.getItem('username')}&msg_id=${msg_id}`)
+        fetch(`https://content-management.my.id/api/retrieve_chat?receiver=${interlocutors}&sender=${localStorage.getItem('username')}&msg_id=${msg_id}`)
           .then((response) => response.json())
           .then((data) => {
             // if there are new messages
