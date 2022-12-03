@@ -1,0 +1,45 @@
+<div class="px-3">
+<div class="position-absolute top-0 start-0">
+  <img class="img-fluid" src="./assets/img/page_header.png">
+</div>
+<!-- Header -->
+<div
+  class="d-flex align-items-center justify-content-between header position-relative"
+>
+  <div class="w-100 text-center" style="font-size: smaller;">
+    <p class="m-0 h3">DigiPoint</p>
+    <p class="m-0"><span id="fullname"></span></p>
+    <p class="m-0"><span id="nik"></span></p>
+  </div>
+</div>
+<!-- end header -->
+
+<!-- content -->
+<div class="content mt-4">
+  <div class="row ">
+
+    <div class="col-lg-12 mb-3">
+      <div class="img-thumbnail shadow-sm">
+        <img src="./assets/img/nopoin.png" class="img-fluid" alt="..." />
+      </div>
+    </div>
+
+  </div>
+
+  <div class="mb-5"><p>&nbsp</p></div>
+</div>
+</div>
+
+<script type="text/javascript">
+  function Initpage(){
+    if(localStorage.getItem("token")){
+      $('#fullname').text(localStorage.getItem("fullname"));
+      $('#nik').text(localStorage.getItem("username"));
+      if(localStorage.getItem("profileimageurl")!=null){
+        /*$('#theprofileimageurl').attr('src', localStorage.getItem("profileimageurl"));*/
+      }
+    }else{
+      window.location.replace("login.html");
+    }
+  }
+</script>

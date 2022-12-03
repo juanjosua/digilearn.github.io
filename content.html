@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+  <!-- fontawesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+
+  <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+
+  <!-- custom css -->
+  <link rel="stylesheet" href="./css/custom.css" />
+  <link rel="stylesheet" href="./css/share.css" />
+  <link rel="stylesheet" href="./css/loading-overlay.css" />
+  <style>
+    .container {
+      max-width: none !important;
+    }
+  </style>
+
+  <!-- <script src="cordova.js"></script> -->
+
+  <title>Home</title>
+</head>
+
+<body>
+  <!-- header -->
+  <div class="container p-0">
+    <div style="background-image: url('./assets/img/header-bg.png');">
+      <div class="position-absolute py-2 d-flex align-items-center fs-1 ms-2" onclick="back();">
+        <i class="fa-solid fa-circle-chevron-left"></i>
+      </div>
+      <div class="text-center py-2" style="font-size: smaller;">
+        <p id="channelName" class="m-0 h3"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- body -->
+  <div id="pagecontent" class="container px-0 bg-light">
+
+    <div id="thecontent" class="p-3">
+      <!-- search box -->
+      <div class="row position-relative bg-white header search-bar">
+        <div class="col-1">
+          <i class="fas fa-search"></i>
+        </div>
+        <div class="col-11">
+          <input style="font-size: small" type="text" class="w-100 border-0" name="keyword" id="keyword" value=""
+            placeholder="Cari materi yang kamu butuhkan disini..." />
+        </div>
+      </div>
+      <!-- end search box -->
+
+      <!-- content -->
+      <div class="content mt-4">
+
+        <div id="nodata" class="row ">
+          <div class="col-lg-12 mb-3">
+            <div class="img-thumbnail shadow-sm">
+              <img src="./assets/img/nohistory.png" class="img-fluid" alt="..." />
+            </div>
+          </div>
+        </div>
+
+        <div id="historyList" class="row mt-2">
+          <!-- semua konten disini -->
+        </div>
+
+        <div class="mb-5">
+          <p>&nbsp</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- bottom navbar -->
+  <nav class="navbar navbar-dark bg-white navbar-expand fixed-bottom d-md-none d-lg-none d-xl-none p-0">
+    <div class="row w-100 p-1" style="margin-left: 0;">
+      <div class="col text-center">
+        <a class="link-dark text-decoration-none col-sm" href="index.html">
+          <i class="fa fa-home" aria-hidden="true"></i>
+          <span style="font-size: smaller;" class="small d-block">Home</span>
+        </a>
+      </div>
+      <div class="col text-center">
+        <a class="link-dark text-decoration-none col-sm" href="history.html">
+          <i class="fa fa-history" aria-hidden="true"></i>
+          <span style="font-size: smaller;" class="small d-block">History</span>
+        </a>
+      </div>
+      <div class="col text-center">
+        <a class="link-dark text-decoration-none col-sm" href="point.html">
+          <i class="fa fa-star text-warning" aria-hidden="true"></i>
+          <span style="font-size: smaller;" class="small d-block">Point</span>
+        </a>
+      </div>
+      <div class="col text-center">
+        <a class="link-dark text-decoration-none col-sm" href="assignment.html">
+          <i class="fa fa-tasks" aria-hidden="true"></i>
+          <span style="font-size: smaller;" class="small d-block">Assign</span>
+        </a>
+      </div>
+      <div class="col text-center">
+        <a class="link-dark text-decoration-none col-sm" href="#" onclick="Logout();">
+          <i class="fa fa-sign-out" aria-hidden="true"></i>
+          <span style="font-size: smaller;" class="small d-block">Logout</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="loading hidden">
+    <div class='uil-ring-css' style='transform:scale(0.79);'>
+      <div></div>
+    </div>
+  </div>
+
+  <!-- Optional JavaScript; choose one of the two! -->
+
+  <!-- jQuery -->
+  <script src="js/jquery/jquery.min.js"></script>
+  <!-- jQuery UI 1.11.4 -->
+  <script src="js/jquery-ui/jquery-ui.min.js"></script>
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+  <script type="text/javascript">
+    //TODO: backendurl = "https://digilearn-webadmin.adira-corpu.com";
+    backendurl = "http://192.168.0.100:8000";
+
+    const findParam = (param) => {
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      return urlParams.get(param)
+    };
+
+    // loading overlay
+    var loadingOverlay = document.querySelector('.loading');
+    function toggleLoading(event) {
+
+      document.activeElement.blur();
+
+      if (loadingOverlay.classList.contains('hidden')) {
+        loadingOverlay.classList.remove('hidden');
+      } else {
+        loadingOverlay.classList.add('hidden');
+      }
+    }
+
+    // first function to run
+    function Initpage() {
+      if (localStorage.getItem("token")) {
+        $('#fullname').text(localStorage.getItem("fullname"));
+        $('#nik').text(localStorage.getItem("username"));
+        if (localStorage.getItem("profileimageurl") != null) {
+          /*$('#theprofileimageurl').attr('src', localStorage.getItem("profileimageurl"));*/
+        }
+
+        document.getElementById('channelName').innerText = findParam('channelName');
+
+        // load item pada channel ini urutkan dari terbaru
+        toggleLoading();
+        getAllContents(findParam('cid'));
+      } else {
+        window.location.replace("login.html");
+      }
+    }
+
+    function back() {
+      backurl = localStorage.getItem("backurl");
+      window.location.href = backurl;
+    }
+
+    // get all content dari channel ini
+    const getAllContents = (cid) => {
+      let content_type_id;
+      if (cid == 1) {
+        // ebook
+        content_type_id = 3;
+      } else if (cid == 5) {
+        // emov
+        content_type_id = 1;
+      } else if (cid == 9) {
+        // epodcast
+        content_type_id = 2;
+      } else if (findParam('url') == 'ask-the-expert.html') {
+        document.location = "ask-the-expert.html";
+      } else {
+        // open webview using url
+
+        //dev
+        if (findParam('channelName') == "e-FAQ") {
+          window.location.href = "efaq/index.html";
+        } else if (findParam('channelName') == "e-Glossary") {
+          window.location.href = "eglossary/index.html";
+        }
+        //dev
+
+        document.getElementById('pagecontent').innerHTML = `
+        <iframe id="inappbrowser" class="position-absolute iframe-browser w-100 h-100 pb-5" name="browser" id="browser"
+        src="${findParam('url')}"></iframe>
+        `;
+      }
+
+      fetch(`http://192.168.0.100:8000/api/allContents?content_type_id=${content_type_id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.length > 0) {
+            document.getElementById('nodata').classList.add('d-none');
+            data.forEach(d => {
+              document.getElementById('historyList').innerHTML += `
+                <div onclick="openContent(${d.id}, '${cid}', '${d.file}')" class="col-lg-12 mb-3">
+                  <div class="card shadow-sm">
+                    <img src="${d.thumbnail}" class="card-img-top" alt="${d.name}" />
+                    <div class="card-body">
+                      <p class="text-category">${d.content_type}</p>
+                      <p class="card-text text-title">${d.name}</p>
+                      <!--<p class="card-text text-date text-muted">Diupload ${d.last_update}</p>-->
+                    </div>
+                  </div>
+                </div>
+              `;
+            });
+          }
+
+          // finnish loading
+          toggleLoading();
+        });
+    }
+
+    // do search when done typing
+    let timer;              // Timer identifier
+    const waitTime = 500;   // Wait time in milliseconds 
+
+    // Listen for `keyup` event
+    const input = document.querySelector('#keyword');
+    input.addEventListener('keyup', (e) => {
+      const text = e.currentTarget.value;
+
+      // Clear timer
+      clearTimeout(timer);
+
+      // Wait for X ms and then process the request
+      timer = setTimeout(() => {
+        toggleLoading();
+        search(findParam('cid'), document.getElementById('keyword').value);
+      }, waitTime);
+    });
+
+    const search = (cid, keyword) => {
+      let content_type_id;
+      if (cid == 1) {
+        // ebook
+        content_type_id = 3;
+      } else if (cid == 5) {
+        // emov
+        content_type_id = 1;
+      } else if (cid == 9) {
+        // epodcast
+        content_type_id = 2;
+      }
+
+      fetch(`http://192.168.0.100:8000/api/allContents?content_type_id=${content_type_id}&keyword=${keyword}`)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data.length)
+          if (data.length == 0) {
+            document.getElementById('historyList').innerHTML = `
+            <div class="text-center">No data.</div>
+            `;
+          } else {
+            document.getElementById('historyList').innerHTML = ``;
+            data.forEach(d => {
+              document.getElementById('historyList').innerHTML += `
+                    <div onclick="openContent(${d.id})" class="col-lg-12 mb-3">
+                      <div class="card shadow-sm">
+                        <img src="${d.thumbnail}" class="card-img-top" alt="${d.name}" />
+                        <div class="card-body">
+                          <p class="text-category">${d.content_type}</p>
+                          <p class="card-text text-title">${d.name}</p>
+                          <!--<p class="card-text text-date text-muted">Diupload ${d.last_update}</p>-->
+                        </div>
+                      </div>
+                    </div>
+                `;
+            });
+          }
+
+          toggleLoading();
+        });
+    }
+
+    function openContent(content_id) {
+      // record user view and redirect to the content page
+    }
+
+    function Logout() {
+      localStorage.clear();
+      window.location.replace("login.html");
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      // do something here ...
+      Initpage();
+    }, false);
+  </script>
+</body>
+
+</html>

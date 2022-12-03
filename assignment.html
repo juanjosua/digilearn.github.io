@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+
+  <!-- fontawesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+
+  <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+
+  <!-- custom css -->
+  <link rel="stylesheet" href="./css/custom.css" />
+  <!-- <script src="cordova.js"></script> -->
+
+  <style>
+    body {
+      font-family: 'Poppins';
+    }
+  </style>
+
+  <title>Home</title>
+</head>
+
+<body>
+  <!-- Bottom Navbar -->
+  <div class="container">
+    <nav class="navbar navbar-dark bg-white navbar-expand fixed-bottom d-md-none d-lg-none d-xl-none p-0">
+      <div class="row w-100 p-1" style="margin-left: 0;">
+        <div class="col text-center">
+          <a class="link-dark text-decoration-none col-sm" href="index.html">
+            <i class="fa fa-home" aria-hidden="true"></i>
+            <span style="font-size: smaller;" class="small d-block">Home</span>
+          </a>
+        </div>
+        <div class="col text-center">
+          <a class="link-dark text-decoration-none col-sm" href="history.html">
+            <i class="fa fa-history" aria-hidden="true"></i>
+            <span style="font-size: smaller;" class="small d-block">History</span>
+          </a>
+        </div>
+        <div class="col text-center">
+          <a class="link-dark text-decoration-none col-sm" href="point.html">
+            <i class="fa fa-star text-warning" aria-hidden="true"></i>
+            <span style="font-size: smaller;" class="small d-block">Point</span>
+          </a>
+        </div>
+        <div class="col text-center">
+          <a class="link-dark text-decoration-none col-sm" href="assignment.html">
+            <i class="fa fa-tasks" aria-hidden="true"></i>
+            <span style="font-size: smaller;" class="small d-block">Assign</span>
+          </a>
+        </div>
+        <div class="col text-center">
+          <a class="link-dark text-decoration-none col-sm" href="#" onclick="Logout();">
+            <i class="fa fa-sign-out" aria-hidden="true"></i>
+            <span style="font-size: smaller;" class="small d-block">Logout</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <div id="pagecontent" class="container px-0 bg-light">
+    <div class="px-3">
+      <div class="position-absolute top-0 start-0 w-100">
+        <img class="img-fluid w-100" src="./assets/img/page_header.png">
+      </div>
+      <!-- Header -->
+      <div class="d-flex align-items-center justify-content-between header position-relative">
+        <div class="w-100 text-center" style="font-size: smaller;">
+          <p class="m-0 h3">Assignment</p>
+          <p class="m-0"><span id="fullname"></span></p>
+          <p class="m-0"><span id="nik"></span></p>
+        </div>
+      </div>
+      <!-- end header -->
+
+      <!-- content -->
+      <div class="content mt-4">
+        <div class="row">
+          <!-- risk profile -->
+          <div class="col-12">
+            <div id="riskprofile" class="w-100"></div>
+          </div>
+        </div>
+        <!-- search box -->
+        <div class="row position-relative bg-white header search-bar mb-4">
+          <div class="col-1">
+            <i class="fas fa-search"></i>
+          </div>
+          <div class="col-11">
+            <input style="font-size: smaller" type="text" class="w-100 border-0 smaller" name="" id=""
+              placeholder="Cari learning history kamu disini..." />
+          </div>
+        </div>
+
+        <div class="row ">
+          <div class="col">
+            <button type="button" class="btn btn-warning mb-2 pt-0 pb-0 fontsmall w-100">Modul Compliance</button>
+          </div>
+          <div class="col">
+            <button type="button" class="btn btn-secondary mb-2 pt-0 pb-0 fontsmall w-100">Modul Lainnya</button>
+          </div>
+        </div>
+        <!-- <div class="row ">
+
+            <div class="col-lg-12 mb-3">
+              <div class="card shadow-sm">
+                <img src="./assets/img/logo.webp" class="card-img-top" alt="..." />
+                <div class="card-body">
+                  <p class="text-category">E-Learn</p>
+                  <p class="card-text text-title">Modul a</p>
+                  <p class="card-text text-date text-muted">Didaftarkan tanggal 24 May 2022</p>
+                  <div class="progress">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-12 mb-3">
+              <div class="card shadow-sm">
+                <img src="./assets/img/logo.webp" class="card-img-top" alt="..." />
+                <div class="card-body">
+                  <p class="text-category">E-Learn</p>
+                  <p class="card-text text-title">Modul a</p>
+                  <p class="card-text text-date text-muted">Didaftarkan tanggal 24 May 2022</p>
+                  <div class="progress">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div> -->
+
+        <div class="mb-5">
+          <p>&nbsp</p>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      function Initpage() {
+        if (localStorage.getItem("token")) {
+          $('#fullname').text(localStorage.getItem("fullname"));
+          $('#nik').text(localStorage.getItem("username"));
+          if (localStorage.getItem("profileimageurl") != null) {
+            /*$('#theprofileimageurl').attr('src', localStorage.getItem("profileimageurl"));*/
+          }
+          getRiskProfile();
+        } else {
+          window.location.replace("login.html");
+        }
+      }
+
+      function showErrMsg(msg) {
+
+      }
+      function hideErrMsg() {
+
+      }
+
+      function getRiskProfile() {
+        var postData = {
+          'action': "loadRiskProfile",
+          'userid': localStorage.getItem("userid"),
+        };
+        var theurl = "https://www.adira-corpu.com/040116adbavi_adi/enhanchment3/homecontent_v2.5.php";
+
+        $.ajax({
+          type: 'POST',
+          url: theurl,
+          data: postData,
+          crossDomain: true,
+          cache: false,
+          success: function (data) {
+            if (data) {
+              data = data.replace("95", "100");
+              $('#riskprofile').html(data);
+            } else {
+              showErrMsg(request.responseText);
+            }
+          },
+          error: function (request, status, error) {
+            showErrMsg(request.responseText);
+          }
+        });
+      }
+    </script>
+  </div>
+
+  <!-- Optional JavaScript; choose one of the two! -->
+
+  <!-- jQuery -->
+  <script src="js/jquery/jquery.min.js"></script>
+  <!-- jQuery UI 1.11.4 -->
+  <script src="js/jquery-ui/jquery-ui.min.js"></script>
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+  <script type="text/javascript">
+    backendurl = "https://digilearn-webadmin.adira-corpu.com";
+
+    if (!localStorage.getItem("token")) {
+      window.location.replace("login.html");
+    }
+
+    $(window).ready(function () {
+      Init();
+    });
+
+    function getUrlVars() {
+      var vars = [], hash;
+      var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+      for (var i = 0; i < hashes.length; i++) {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+      }
+      return vars;
+    }
+
+    function Logout() {
+      localStorage.clear();
+      window.location.replace("login.html");
+    }
+
+    function Init() {
+      webservicesurl = "https://digilearn.adira-corpu.com/";
+
+      pages = ['home'];//0
+      pages.push("home");//1
+      pages.push("history");//2
+      pages.push("point");//3
+      pages.push("assignment");//4
+      pages.push("channel");//5
+      pages.push("search");//6
+
+      pageid = 1;
+      if (getUrlVars()["id"] != "") {
+        pageid = getUrlVars()["id"];
+      }
+
+      cid = 0;
+      if (getUrlVars()["cid"] != "") {
+        cid = getUrlVars()["cid"];
+      }
+      if (cid == undefined) {
+        cid = 0;
+      }
+
+      if (pageid == undefined) {
+        pageid = 1;
+      }
+
+      if (pageid.toString().includes('#')) {
+        pageid = pageid.toString().replace('#', '');
+      }
+
+      Initpage();
+
+      /*$('#pagecontent').load('pages/'+pages[pageid]+'.html', function() {
+        
+        Initpage();
+          
+      });*/
+    }
+  </script>
+
+  <!-- Option 2: Separate Popper and Bootstrap JS -->
+  <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    -->
+</body>
+
+</html>

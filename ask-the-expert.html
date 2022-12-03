@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+
+    <!-- fontawesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+
+    <!-- custom css -->
+    <link rel="stylesheet" href="./css/custom.css" />
+    <link rel="stylesheet" href="./css/chat.css" />
+    <!-- <script src="cordova.js"></script> -->
+
+    <!-- leaderboard css -->
+    <link rel="stylesheet" href="./css/leaderboard.css">
+    <link rel="stylesheet" href="./css/squaregrid.css">
+
+    <style>
+        .container {
+            max-width: none !important;
+        }
+    </style>
+    <link rel="stylesheet" href="./css/floating.css" />
+
+    <title>Ask The Expert</title>
+</head>
+
+<body>
+
+    <a href="chatlist-expert.html" class="float mb-3 d-flex align-items-center justify-content-center text-dark" style="background-color: #ffc107;">
+        <i class="fas fa-comments" class="my-float"></i>
+    </a>
+
+    <!-- header -->
+    <div class="container p-0">
+        <div style="background-image: url('./assets/img/header-bg.png');">
+            <div class="text-center py-2" style="font-size: smaller;">
+                <div class="position-absolute d-flex align-items-center fs-1 ms-2" onclick="history.back();">
+                    <i class="fa-solid fa-circle-chevron-left"></i>
+                </div>
+                <p class="m-0 h3">Ask The Expert</p>
+                <!-- <img src="./assets/img/placeholders/ava.png" alt="Avatar" class="avatar"> -->
+                <p class="m-0 d-none"><span id="nik"></span></p>
+                <p class="m-0 d-none"><span id="fullname"></span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- content -->
+    <div id="pagecontent" class="container p-2 pt-0 pb-5 bg-light">
+        <div id="topics">
+            <SquareGrid id="square-grid"></SquareGrid>
+        </div>
+
+    </div>
+    <!-- end content -->
+    </div>
+    <!-- end header -->
+
+    <nav class="navbar navbar-dark bg-white navbar-expand fixed-bottom d-md-none d-lg-none d-xl-none p-0">
+        <div class="row w-100 p-1" style="margin-left: 0;">
+            <div class="col text-center">
+                <a class="link-dark text-decoration-none col-sm" href="index.html">
+                    <i class="fa fa-home" aria-hidden="true"></i>
+                    <span style="font-size: smaller;" class="small d-block">Home</span>
+                </a>
+            </div>
+            <div class="col text-center">
+                <a class="link-dark text-decoration-none col-sm" href="history.html">
+                    <i class="fa fa-history" aria-hidden="true"></i>
+                    <span style="font-size: smaller;" class="small d-block">History</span>
+                </a>
+            </div>
+            <div class="col text-center">
+                <a class="link-dark text-decoration-none col-sm" href="point.html">
+                    <i class="fa fa-star text-warning" aria-hidden="true"></i>
+                    <span style="font-size: smaller;" class="small d-block">Point</span>
+                </a>
+            </div>
+            <div class="col text-center">
+                <a class="link-dark text-decoration-none col-sm" href="assignment.html">
+                    <i class="fa fa-tasks" aria-hidden="true"></i>
+                    <span style="font-size: smaller;" class="small d-block">Assign</span>
+                </a>
+            </div>
+            <div class="col text-center">
+                <a class="link-dark text-decoration-none col-sm" href="#" onclick="Logout();">
+                    <i class="fa fa-sign-out" aria-hidden="true"></i>
+                    <span style="font-size: smaller;" class="small d-block">Logout</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- jQuery -->
+    <script src="js/jquery/jquery.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="js/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        const loadTopics = () => {
+            fetch(`http://192.168.0.100:8000/api/topics`)
+                .then((response) => response.json())
+                .then((data) => {
+                    data.forEach((d, i) => {
+                        document.getElementById('square-grid').innerHTML += `
+                        <h2>${d.name}</h2>
+                            <SquareGrid4 id="${i}" class="mb-4"></SquareGrid4>
+                        <hr>
+                        `;
+
+                        fetch(`http://192.168.0.100:8000/api/experts?category=${d.name}&limit=3`)
+                            .then((response) => response.json())
+                            .then((data2) => {
+                                data2.forEach(d2 => {
+                                    let now = new Date();
+                                    let start = new Date(Date.parse(`${d2.online_time_start}`.replace(/-/g, '/')))
+                                    let end = new Date(Date.parse(`${d2.online_time_end}`.replace(/-/g, '/')))
+
+                                    if ((start.getTime() < now.getTime()) && (now.getTime() < end.getTime())) {
+                                        document.getElementById(i).innerHTML +=
+                                            `<a href="profile.html?username=${d2.nik}&expert_id=${d2.id}&topic=${d.name}"><div class="text-center">
+                                            <img src="${d2.photo ?? 'http://192.168.0.100:8000/img/default/avatar.png'}"
+                                                alt="" width="73px">
+                                            <div class="text-center">${d2.fullname}</div>
+                                            <div class="text-center" style="color: green;">Online</div>
+                                        </div></a>`;
+                                    } else {
+                                        document.getElementById(i).innerHTML +=
+                                        `<a href="profile.html?username=${d2.nik}&expert_id=${d2.id}&topic=${d.name}"><div class="text-center">
+                                            <img src="${d2.photo ?? 'http://192.168.0.100:8000/img/default/avatar.png'}"
+                                                alt="" width="73px">
+                                            <div class="text-center">${d2.fullname}</div>
+                                        </div></a>`;
+                                    }
+                                });
+                            }).then(() => {
+                                document.getElementById(i).innerHTML +=
+                                    `<a href="category.html?category=${d.name}" class="btn d-flex justify-content-center align-items-center">
+                                            <i class="fa-solid fa-arrow-right h1 m-0"></i>
+                                    </a>`;
+                            });
+                    });
+                });
+        };
+
+        // first function to run
+        function Initpage() {
+            if (localStorage.getItem("token")) {
+                $('#fullname').text(localStorage.getItem("fullname"));
+                $('#nik').text(localStorage.getItem("username"));
+                if (localStorage.getItem("profileimageurl") != null) {
+                    /*$('#theprofileimageurl').attr('src', localStorage.getItem("profileimageurl"));*/
+                }
+
+                // choose topic
+                loadTopics();
+            } else {
+                window.location.replace("login.html");
+            }
+        }
+    </script>
+
+    <script type="text/javascript">
+        backendurl = "https://digilearn-webadmin.adira-corpu.com";
+
+        if (!localStorage.getItem("token")) {
+            window.location.replace("login.html");
+        }
+
+        $(window).ready(function () {
+            Init();
+        });
+
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        }
+
+        function Logout() {
+            localStorage.clear();
+            window.location.replace("login.html");
+        }
+
+        function Init() {
+            webservicesurl = "https://digilearn.adira-corpu.com/";
+
+            pages = ['home'];//0
+            pages.push("home");//1
+            pages.push("history");//2
+            pages.push("point");//3
+            pages.push("assignment");//4
+            pages.push("channel");//5
+            pages.push("search");//6
+
+            pageid = 1;
+            if (getUrlVars()["id"] != "") {
+                pageid = getUrlVars()["id"];
+            }
+
+            cid = 0;
+            if (getUrlVars()["cid"] != "") {
+                cid = getUrlVars()["cid"];
+            }
+            if (cid == undefined) {
+                cid = 0;
+            }
+
+            if (pageid == undefined) {
+                pageid = 1;
+            }
+
+            if (pageid.toString().includes('#')) {
+                pageid = pageid.toString().replace('#', '');
+            }
+
+            Initpage();
+
+            /*$('#pagecontent').load('pages/'+pages[pageid]+'.html', function() {
+              
+              Initpage();
+                
+            });*/
+        }
+    </script>
+
+</body>
+
+</html>

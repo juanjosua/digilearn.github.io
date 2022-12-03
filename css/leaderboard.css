@@ -1,0 +1,10 @@
+.avatar {
+  vertical-align: middle;
+  width: 100px;
+  border-radius: 50%;
+}
+
+.mini-avatar {
+  width: 50px;
+  border-radius: 50%;
+}

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+
+  <!-- fontawesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+
+  <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+
+  <!-- custom css -->
+  <link rel="stylesheet" href="./css/custom.css" />
+  <!-- <script src="cordova.js"></script> -->
+
+  <!-- leaderboard css -->
+  <link rel="stylesheet" href="./css/leaderboard.css">
+  <link rel="stylesheet" href="./css/squaregrid.css">
+  <link rel="stylesheet" href="./css/profile.css">
+
+  <style>
+    .container {
+      max-width: none !important;
+    }
+  </style>
+
+  <title>Ask The Expert</title>
+</head>
+
+<body>
+
+  <!-- header -->
+  <div class="container p-0">
+    <div style="background-image: url('./assets/img/header-bg.png');">
+      <div class="text-center py-2" style="font-size: smaller;">
+        <div class="position-absolute d-flex align-items-center fs-1 ms-2" onclick="history.back();">
+          <i class="fa-solid fa-circle-chevron-left"></i>
+        </div>
+        <p class="m-0 h3">Ask The Expert</p>
+        <!-- <img src="./assets/img/placeholders/ava.png" alt="Avatar" class="avatar"> -->
+        <p class="m-0 d-none"><span id="nik"></span></p>
+        <p class="m-0 d-none"><span id="fullname"></span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- content -->
+  <div id="pagecontent" class="container p-2 pt-0 pb-5 bg-light">
+    <div class="container mb-4 p-3 d-flex justify-content-center">
+      <div class=" image d-flex flex-column justify-content-center align-items-center w-100">
+        <img id="profpic" src="" height="100" width="100" />
+        <span class="name mt-3" id="efullname">Juan Josua Nainggolan</span>
+        <span class="idd" id="enik">10089923</span>
+        <div class="d-flex flex-row justify-content-center align-items-center gap-2"> <span class="idd1"
+            id="ejabatan">Learning
+            Infrastructure Officer</span> </div>
+        <div class="form-floating text-center mt-3 w-100">
+          <textarea class="form-control" placeholder="Leave questions here" id="questions"
+            style="height: 100px"></textarea>
+          <label for="floatingTextarea2">Pertanyaan Anda</label>
+        </div>
+        <div class=" d-flex mt-2">
+          <button class="btn btn-warning" onclick="sendQuestions();">Kirim pertanyaan</button>
+        </div>
+
+        <div class="text mt-3" id="start_chat_desc"></div>
+        <div class=" d-flex mt-2">
+          <button class="btn btn-warning" id="start_chat">Mulai percakapan</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- end content -->
+  </div>
+  <!-- end header -->
+
+  <nav class="navbar navbar-dark bg-white navbar-expand fixed-bottom d-md-none d-lg-none d-xl-none p-0">
+    <div class="row w-100 p-1" style="margin-left: 0;">
+      <div class="col text-center">
+        <a class="link-dark text-decoration-none col-sm" href="index.html">
+          <i class="fa fa-home" aria-hidden="true"></i>
+          <span style="font-size: smaller;" class="small d-block">Home</span>
+        </a>
+      </div>
+      <div class="col text-center">
+        <a class="link-dark text-decoration-none col-sm" href="history.html">
+          <i class="fa fa-history" aria-hidden="true"></i>
+          <span style="font-size: smaller;" class="small d-block">History</span>
+        </a>
+      </div>
+      <div class="col text-center">
+        <a class="link-dark text-decoration-none col-sm" href="point.html">
+          <i class="fa fa-star text-warning" aria-hidden="true"></i>
+          <span style="font-size: smaller;" class="small d-block">Point</span>
+        </a>
+      </div>
+      <div class="col text-center">
+        <a class="link-dark text-decoration-none col-sm" href="assignment.html">
+          <i class="fa fa-tasks" aria-hidden="true"></i>
+          <span style="font-size: smaller;" class="small d-block">Assign</span>
+        </a>
+      </div>
+      <div class="col text-center">
+        <a class="link-dark text-decoration-none col-sm" href="#" onclick="Logout();">
+          <i class="fa fa-sign-out" aria-hidden="true"></i>
+          <span style="font-size: smaller;" class="small d-block">Logout</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- jQuery -->
+  <script src="js/jquery/jquery.min.js"></script>
+  <!-- jQuery UI 1.11.4 -->
+  <script src="js/jquery-ui/jquery-ui.min.js"></script>
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"></script>
+
+  <script type="text/javascript">
+    const findTopic = () => {
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      return urlParams.get('username');
+    };
+
+    const paramValue = (param) => {
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      return urlParams.get(param);
+    };
+
+    // Example POST method implementation:
+    async function postQuestion(url = '', data = {}) {
+      // Default options are marked with *
+      const response = await fetch(url, {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+          'Content-Type': 'application/json'
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: 'follow', // manual, *follow, error
+        referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        body: JSON.stringify(data) // body data type must match "Content-Type" header
+      });
+      return response.json(); // parses JSON response into native JavaScript objects
+    }
+
+    const sendQuestions = (nik, fullname, jabatan) => {
+
+      postQuestion('http://192.168.0.100:8000/api/send_chat', {
+        receiver: localStorage.getItem('username'),
+        sender: nik,
+        message: "Selamat sore, selamat datang di Ask The Expert. Ada yang dapat saya bantu?",
+        sender_fullname: fullname,
+        sender_position: jabatan,
+      }).then((data) => {
+          // console.log(data); // JSON data parsed by `data.json()` call
+          window.location.href = `chat-room-user.html?username=${findTopic()}`;
+        });
+
+    };
+
+    // Example POST method implementation:
+    async function postQuestion(url = '', data = {}) {
+      // Default options are marked with *
+      const response = await fetch(url, {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+          'Content-Type': 'application/json'
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: 'follow', // manual, *follow, error
+        referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        body: JSON.stringify(data) // body data type must match "Content-Type" header
+      });
+      return response.json(); // parses JSON response into native JavaScript objects
+    }
+
+    const loadProfile = (nik) => {
+      fetch(`http://192.168.0.100:8000/api/profile?username=${nik}`)
+        .then((response) => response.json())
+        .then((data) => {
+          document.getElementById('efullname').innerText = data.fullname;
+          document.getElementById('enik').innerText = data.nik;
+          document.getElementById('ejabatan').innerText = data.jabatan;
+          document.getElementById('profpic').src = data.photo ?? 'http://192.168.0.100:8000/img/default/avatar.png';
+
+          let now = new Date();
+          let start = new Date(Date.parse(`${data.online_time_start}`.replace(/-/g, '/')))
+          let end = new Date(Date.parse(`${data.online_time_end}`.replace(/-/g, '/')))
+
+          if ((start.getTime() < now.getTime()) && (now.getTime() < end.getTime())) {
+            document.getElementById('start_chat_desc').innerHTML = `
+            <span>Klik tombol ini untuk memulai percakapan.</span>
+            `;
+            document.getElementById('start_chat').disabled = false;
+            document.getElementById('start_chat').onclick = function () {
+              sendQuestions(data.nik, data.fullname, data.jabatan);
+            }
+          } else {
+            document.getElementById('start_chat').disabled = true;
+            document.getElementById('start_chat_desc').innerHTML = `
+            <span>Untuk mengobrol langsung dengan expert silakan kembali pada tanggal <strong
+                id="online_time">${start.toLocaleDateString("id-ID", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit' })} WIB</strong>.</span>
+            `;
+          }
+
+        });
+    };
+
+    // first function to run
+    function Initpage() {
+      if (localStorage.getItem("token")) {
+        $('#fullname').text(localStorage.getItem("fullname"));
+        $('#nik').text(localStorage.getItem("username"));
+        if (localStorage.getItem("profileimageurl") != null) {
+          /*$('#theprofileimageurl').attr('src', localStorage.getItem("profileimageurl"));*/
+        }
+        loadProfile(findTopic());
+      } else {
+        window.location.replace("login.html");
+      }
+    }
+  </script>
+
+  <script type="text/javascript">
+    backendurl = "https://digilearn-webadmin.adira-corpu.com";
+
+    if (!localStorage.getItem("token")) {
+      window.location.replace("login.html");
+    }
+
+    $(window).ready(function () {
+      Init();
+    });
+
+    const findExpertId = () => {
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      return urlParams.get('expert_id');
+    };
+
+    function getUrlVars() {
+      var vars = [], hash;
+      var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+      for (var i = 0; i < hashes.length; i++) {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+      }
+      return vars;
+    }
+
+    function Logout() {
+      localStorage.clear();
+      window.location.replace("login.html");
+    }
+
+    function Init() {
+      webservicesurl = "https://digilearn.adira-corpu.com/";
+
+      pages = ['home'];//0
+      pages.push("home");//1
+      pages.push("history");//2
+      pages.push("point");//3
+      pages.push("assignment");//4
+      pages.push("channel");//5
+      pages.push("search");//6
+
+      pageid = 1;
+      if (getUrlVars()["id"] != "") {
+        pageid = getUrlVars()["id"];
+      }
+
+      cid = 0;
+      if (getUrlVars()["cid"] != "") {
+        cid = getUrlVars()["cid"];
+      }
+      if (cid == undefined) {
+        cid = 0;
+      }
+
+      if (pageid == undefined) {
+        pageid = 1;
+      }
+
+      if (pageid.toString().includes('#')) {
+        pageid = pageid.toString().replace('#', '');
+      }
+
+      Initpage();
+
+      /*$('#pagecontent').load('pages/'+pages[pageid]+'.html', function() {
+        
+        Initpage();
+          
+      });*/
+    }
+  </script>
+
+</body>
+
+</html>

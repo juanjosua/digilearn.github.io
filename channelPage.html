@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+  <!-- fontawesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+
+  <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+
+  <!-- custom css -->
+  <link rel="stylesheet" href="./css/custom.css" />
+  <link rel="stylesheet" href="./css/share.css" />
+  <link rel="stylesheet" href="./css/loading-overlay.css" />
+  <style>
+    .container {
+      max-width: none !important;
+    }
+  </style>
+
+  <script src="cordova.js"></script>
+
+  <title>Home</title>
+</head>
+
+<body>
+  <!-- header -->
+  <div class="container p-0">
+    <div style="background-image: url('./assets/img/header-bg.png');">
+      <div class="position-absolute py-2 d-flex align-items-center fs-1 ms-2" onclick="back();">
+        <i class="fa-solid fa-circle-chevron-left"></i>
+      </div>
+      <div class="text-center py-2" style="font-size: smaller;">
+        <p id="channelName" class="m-0 h3"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- body -->
+  <div id="pagecontent" class="container px-0 bg-light">
+
+    <iframe id="ebookviewer" class='iframe-browser w-100' src='' frameborder='0' style="height: 50vh;"></iframe>
+
+    <video id="emovviewer" class='iframe-browser w-100 h-75' autoplay="0" controls controlsList="nodownload" loop="0"
+      id="epodcast">
+      <source id="mp4vid" src="" type="video/mp4">
+    </video>
+
+    <video id="epodcastviewer" class='iframe-browser w-100' autoplay="0" controls controlsList="nodownload" loop="0"
+      id="epodcast">
+      <source id="mp4vid" src="" type="audio/mpeg">
+    </video>
+
+    <script type="text/javascript">
+      function Initpage() {
+        $("#epodcastviewer").hide();
+        $("#emovviewer").hide();
+        $("#thecontent").hide();
+        $("#ebookviewer").hide();
+        if (localStorage.getItem("token")) {
+          $('#fullname').text(localStorage.getItem("fullname"));
+          $('#nik').text(localStorage.getItem("username"));
+          if (localStorage.getItem("profileimageurl") != null) {
+            /*$('#theprofileimageurl').attr('src', localStorage.getItem("profileimageurl"));*/
+          }
+          getChannel(cid);
+        } else {
+          window.location.replace("login.html");
+        }
+      }
+
+      function back() {
+        backurl = localStorage.getItem("backurl");
+        window.location.href = backurl;
+      }
+
+      function getChannel(id) {
+        var postData = {
+          'id': id,
+        };
+        $.ajax({
+          type: 'GET',
+          url: backendurl + "/api/channels",
+          data: postData,
+          dataType: 'json',
+          success: function (data) {
+            $('#channelName').html(data.name);
+            if (localStorage.getItem("content_id") != "-") {
+              openContent(localStorage.getItem("content_id"), localStorage.getItem("content_type_id"), localStorage.getItem("theurl"));
+            } else {
+              if (localStorage.getItem("fromindex") == "1") {
+                localStorage.setItem("fromindex", "0");
+                localStorage.setItem("backurl", "index.html");
+              } else {
+                localStorage.setItem("backurl", "channel.html?cid=" + id);
+              }
+
+              if (data.url.trim() != "") {
+                if (data.url.trim() == 'ask-the-expert.html') {
+                  document.location = "ask-the-expert.html";
+                }
+                $("#epodcastviewer").hide();
+                $("#emovviewer").hide();
+                $("#ebookviewer").hide();
+                $("#thecontent").hide();
+                $("#inappbrowser").show();
+                document.getElementById('like-and-comment').classList.add('d-none');
+                $("#inappbrowser").attr("src", data.url);
+                toggleLoading();
+              } else {
+                $("#thecontent").show();
+                $("#inappbrowser").hide();
+                $("#ebookviewer").hide();
+                $("#epodcastviewer").hide();
+                $("#emovviewer").hide();
+                if (data.name == "e-Mov") {
+                  content_type_id = 1;
+                } else if (data.name == "e-Podcast") {
+                  content_type_id = 2;
+                } else if (data.name == "e-Book") {
+                  content_type_id = 3;
+                }
+              }
+            }
+            toggleLoading();
+          },
+          error: function (request, status, error) {
+            showErrMsg(request.responseText);
+          }
+        });
+      }
+
+      function openContent(content_id, content_type_id, theurl) {
+        if (localStorage.getItem("fromindex") == "1") {
+          localStorage.setItem("fromindex", "0");
+          localStorage.setItem("backurl", "index.html");
+        } else {
+          localStorage.setItem("backurl", "channel.html?cid=" + cid);
+        }
+
+        var postData = {
+          'content_id': content_id,
+          'nik': localStorage.getItem("username")
+        };
+        $.ajax({
+          type: 'POST',
+          url: backendurl + "/api/view_logs",
+          data: postData,
+          dataType: 'json',
+          success: function (datas) {
+            //open filenya
+            if (content_type_id == "3") {
+              $("#ebookviewer").show();
+              $("#thecontent").hide();
+              $("#inappbrowser").hide();
+              $("#epodcastviewer").hide();
+              $("#emovviewer").hide();
+
+              $("#ebookviewer").attr("src", "./js/pdf.js/web/viewer.html?file=" + theurl);
+            }
+            if (content_type_id == "2") {
+              $("#ebookviewer").hide();
+              $("#thecontent").hide();
+              $("#inappbrowser").hide();
+              $("#epodcastviewer").show();
+              $("#emovviewer").hide();
+
+              $("#epodcastviewer").attr("src", theurl);
+            }
+            if (content_type_id == "1") {
+              $("#ebookviewer").hide();
+              $("#thecontent").hide();
+              $("#inappbrowser").hide();
+              $("#epodcastviewer").hide();
+              $("#emovviewer").show();
+
+              $("#emovviewer").attr("src", theurl);
+            }
+
+          },
+          error: function (request, status, error) {
+            console.log(request.responseJSON.message);
+          }
+        });
+      }
+
+    </script>
+  </div>
+
+  <div id="like-and-comment">
+    <div class="container border-bottom" style="font-family: 'Roboto';">
+      <div class="col">
+        <div class="row" style="margin: auto;">
+          <small class="p-0" id="tags">
+          </small>
+        </div>
+        <div class="row h2" id="title" style="margin: auto;"></div>
+        <div class="col py-2 d-flex justify-content-evenly">
+          <div class="text-center" onclick="sendLike(1);"><i class="fas fa-thumbs-up h2"></i><br><small
+              id="like_counter">Like</small></div>
+          <div class="text-center" onclick="sendLike(0);"><i class="fas fa-thumbs-down h2"></i><br><small
+              id="dislike_counter">Dislike</small>
+          </div>
+          <!-- share button -->
+          <div class="text-center share-button" onclick="shareContent();">
+            <i class="fas fa-share h2"></i><br><small>Share</small></div>
+        </div>
+      </div>
+    </div>
+    <div class="container" style="padding-bottom: 10vh;">
+      <div class="col mt-2" id="comment-section">
+        <div class="col" style="margin: auto;"><b>Comments</b> <span id="comment_counter"></span></div>
+        <div class="row my-3" id="new-comment" style="margin: auto;">
+          <input id="comment" class="p-0 border-bottom" type="text" placeholder="Masukkan komentar Anda..."
+            style="outline: o; border-width: 0 0 2px; width: 100%;">
+          <div class="p-0 mt-2 d-flex justify-content-end">
+            <button class="btn btn-warning" style="font-size: 10px;" onclick="sendComment();">Send</button>
+          </div>
+        </div>
+        <div id="comments"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- bottom navbar -->
+  <nav class="navbar navbar-dark bg-white navbar-expand fixed-bottom d-md-none d-lg-none d-xl-none p-0">
+    <div class="row w-100 p-1" style="margin-left: 0;">
+      <div class="col text-center">
+        <a class="link-dark text-decoration-none col-sm" href="index.html">
+          <i class="fa fa-home" aria-hidden="true"></i>
+          <span style="font-size: smaller;" class="small d-block">Home</span>
+        </a>
+      </div>
+      <div class="col text-center">
+        <a class="link-dark text-decoration-none col-sm" href="history.html">
+          <i class="fa fa-history" aria-hidden="true"></i>
+          <span style="font-size: smaller;" class="small d-block">History</span>
+        </a>
+      </div>
+      <div class="col text-center">
+        <a class="link-dark text-decoration-none col-sm" href="point.html">
+          <i class="fa fa-star text-warning" aria-hidden="true"></i>
+          <span style="font-size: smaller;" class="small d-block">Point</span>
+        </a>
+      </div>
+      <div class="col text-center">
+        <a class="link-dark text-decoration-none col-sm" href="assignment.html">
+          <i class="fa fa-tasks" aria-hidden="true"></i>
+          <span style="font-size: smaller;" class="small d-block">Assign</span>
+        </a>
+      </div>
+      <div class="col text-center">
+        <a class="link-dark text-decoration-none col-sm" href="#" onclick="Logout();">
+          <i class="fa fa-sign-out" aria-hidden="true"></i>
+          <span style="font-size: smaller;" class="small d-block">Logout</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="loading hidden">
+    <div class='uil-ring-css' style='transform:scale(0.79);'>
+      <div></div>
+    </div>
+  </div>
+
+  <!-- Optional JavaScript; choose one of the two! -->
+
+  <!-- jQuery -->
+  <script src="js/jquery/jquery.min.js"></script>
+  <!-- jQuery UI 1.11.4 -->
+  <script src="js/jquery-ui/jquery-ui.min.js"></script>
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+  <script type="text/javascript">
+    //TODO: backendurl = "https://digilearn-webadmin.adira-corpu.com";
+    backendurl = "http://192.168.0.100:8000";
+
+    var loadingOverlay = document.querySelector('.loading');
+    function toggleLoading(event) {
+
+      document.activeElement.blur();
+
+      if (loadingOverlay.classList.contains('hidden')) {
+        loadingOverlay.classList.remove('hidden');
+      } else {
+        loadingOverlay.classList.add('hidden');
+      }
+    }
+
+    if (!localStorage.getItem("token")) {
+      window.location.replace("login.html");
+    }
+
+    $(window).ready(function () {
+      Init();
+    });
+
+    function getUrlVars() {
+      var vars = [], hash;
+      var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+      for (var i = 0; i < hashes.length; i++) {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+      }
+      return vars;
+    }
+
+    function Logout() {
+      localStorage.clear();
+      window.location.replace("login.html");
+    }
+
+    function Init() {
+      toggleLoading();
+      //TODO: webservicesurl = "https://digilearn.adira-corpu.com/";
+      webservicesurl = "http://192.168.0.100:8000/";
+
+      pages = ['home'];//0
+      pages.push("home");//1
+      pages.push("history");//2
+      pages.push("point");//3
+      pages.push("assignment");//4
+      pages.push("channel");//5
+      pages.push("search");//6
+
+      pageid = 1;
+      if (getUrlVars()["id"] != "") {
+        pageid = getUrlVars()["id"];
+      }
+
+      cid = 0;
+      if (getUrlVars()["cid"] != "") {
+        cid = getUrlVars()["cid"];
+      }
+      if (cid == undefined) {
+        cid = 0;
+      }
+
+      if (pageid == undefined) {
+        pageid = 1;
+      }
+
+      if (pageid.toString().includes('#')) {
+        pageid = pageid.toString().replace('#', '');
+      }
+
+      Initpage();
+    }
+  </script>
+
+  <script>
+    let content_id = localStorage.getItem('content_id');
+    toggleLoading();
+    // let content_id = 1059;
+    fetch(`http://192.168.0.100:8000/api/tags?content_id=${content_id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        data.forEach(d => {
+          if (d) {
+            document.getElementById('tags').innerHTML += `<a href="javascript:void(0)" onclick="openTag('${d}');">#${d}</a> `;
+          }
+        });
+
+        updateLike();
+      });
+
+    const openTag = (tag) => {
+      localStorage.setItem("keyword", tag);
+      window.location.replace("search.html");
+    }
+
+    const updateLike = () => {
+      fetch(`http://192.168.0.100:8000/api/content_info?content_id=${content_id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          document.getElementById('like_counter').innerText = data[0].likes;
+          document.getElementById('dislike_counter').innerText = data[0].dislikes;
+          document.getElementById('title').innerText = data[0].name;
+          document.getElementById('comment_counter').innerText = data.filter((obj) => obj.comment !== null).length;
+          document.getElementById('comments').innerHTML = '';
+
+          if (data.filter((obj) => obj.comment !== null).length > 0) {
+            data.forEach(d => {
+              document.getElementById('comments').innerHTML += `
+                  <div class="row my-3 w-100" style="margin: auto;">
+                    <div class="col-2 d-flex justify-content-center align-items-center" style="padding-left: 0;">
+                      <img
+                        src="https://w7.pngwing.com/pngs/336/946/png-transparent-avatar-user-medicine-surgery-patient-avatar-face-heroes-head-thumbnail.png"
+                        alt="Avatar" width="40px" class="avatar">
+                    </div>
+                    <div class="col-10 px-0 d-flex align-items-center">
+                      <div class="row">
+                        <span>${d.comment}</span>
+                        <span style="font-size: 10px;">${d.fullname} - ${d.created_at}</span>
+                      </div>
+                    </div>
+                  </div>
+                `;
+            });
+          }
+          toggleLoading();
+        })
+        .catch((error) => {
+          toggleLoading();
+          console.error('Error:', error);
+        });
+    }
+
+    const sendLike = (like) => {
+      toggleLoading();
+      // let content_id = 1059;
+      let content_id = localStorage.getItem('content_id');
+      let username = localStorage.getItem('username');
+      let fullname = localStorage.getItem('fullname');
+
+      fetch(`http://192.168.0.100:8000/api/like?content_id=${content_id}&username=${username}&fullname=${fullname}&like=${like}`)
+        .then((response) => response.json())
+        .then((data) => {
+          // console.log(data);
+          updateLike();
+        })
+    }
+
+    const sendComment = () => {
+      toggleLoading();
+      let comment = document.getElementById('comment').value;
+      // let content_id = 1059;
+      let content_id = localStorage.getItem('content_id');
+      let username = localStorage.getItem('username');
+      let fullname = localStorage.getItem('fullname');
+
+      const data = { comment: comment, content_id: content_id, username: username, fullname: fullname };
+
+      fetch('http://192.168.0.100:8000/api/comment', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // console.log('Success:', data);
+          document.getElementById('comment').value = '';
+          updateLike();
+        })
+        .catch((error) => {
+          toggleLoading();
+          console.error('Error:', error);
+        });
+    }
+  </script>
+  <!-- <script src="./js/share.js"></script> -->
+
+  <!-- share content -->
+  <script>
+    const shareContent = () => {
+      navigator.share(`https://digilearn.adira-corpu.com/channel.html?channel_id=${getUrlVars()['cid']}&content_id=${localStorage.getItem('content_id')}&file=${localStorage.getItem("theurl")}`, `${document.getElementById('title').innerText}`);
+    }
+  </script>
+</body>
+
+</html>

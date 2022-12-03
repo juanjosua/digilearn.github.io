@@ -1,0 +1,164 @@
+<div class="px-3">
+<div class="position-absolute top-0 start-0">
+  <img class="img-fluid" src="./assets/img/page_header.png">
+</div>
+<!-- Header -->
+<div
+  class="d-flex align-items-center justify-content-between header position-relative"
+>
+  <div class="w-100 text-center" style="font-size: smaller;">
+    <p class="m-0 h3">Learning History</p>
+    <p class="m-0"><span id="fullname"></span></p>
+    <p class="m-0"><span id="nik"></span></p>
+  </div>
+</div>
+<!-- end header -->
+<!-- search box -->
+<div class="row position-relative bg-white header search-bar">
+  <div class="col-1">
+    <i class="fas fa-search"></i>
+  </div>
+  <div class="col-11">
+    <input style="font-size: small" type="text" class="w-100 border-0" name="keyword" id="keyword" value="" placeholder="Cari learning history kamu disini..." />
+  </div>
+</div>
+<!-- end search box -->
+
+<!-- content -->
+<div class="content mt-4">
+  <div class="row ">
+    <div class="col ">
+      <button onclick="getHistory(0);" type="button" class="btn btn-warning mb-2 pt-0 pb-0 fontsmall">All</button>
+      <button onclick="getHistory(3);" type="button" class="btn btn-secondary mb-2 pt-0 pb-0 fontsmall">e-book</button>
+      <button onclick="getHistory(1);" type="button" class="btn btn-secondary mb-2 pt-0 pb-0 fontsmall">e-mov</button>
+      <button onclick="getHistory(2);" type="button" class="btn btn-secondary mb-2 pt-0 pb-0 fontsmall">e-podcast</button>
+    </div>
+  </div>
+
+  <div id="nodata" class="row ">
+    <div class="col-lg-12 mb-3">
+      <div class="img-thumbnail shadow-sm">
+        <img src="./assets/img/nohistory.png" class="img-fluid" alt="..." />
+      </div>
+    </div>
+  </div>
+
+  <div id="loadingData" class="w-100 text-center">
+    <div class="lds-ellipsis">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <p class="p-0">sedang memuat...</p>
+  </div>
+
+  <div id="historyList" class="row mt-2"></div>
+
+  <div class="mb-5"><p>&nbsp</p></div>
+</div>
+</div>
+
+<script type="text/javascript">
+  function Initpage(){
+    $('#loadingData').show();
+    
+    if(localStorage.getItem("token")){
+      $('#fullname').text(localStorage.getItem("fullname"));
+      $('#nik').text(localStorage.getItem("username"));
+      if(localStorage.getItem("profileimageurl")!=null){
+        /*$('#theprofileimageurl').attr('src', localStorage.getItem("profileimageurl"));*/
+      }
+
+      $('#nodata').hide();
+      content_type_id = 0;
+      getHistory(content_type_id);//all
+
+      var typingTimer;                //timer identifier
+      var doneTypingInterval = 2000;  //time in ms, 5 seconds for example
+      var $input = $('#keyword');
+
+      //on keyup, start the countdown
+      $input.on('keyup', function () {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(doneTyping, doneTypingInterval);
+      });
+
+      //on keydown, clear the countdown 
+      $input.on('keydown', function () {
+        clearTimeout(typingTimer);
+      });
+
+    }else{
+      window.location.replace("login.html");
+    }
+  }
+
+  function doneTyping () {
+    getHistory(content_type_id);
+  }
+
+  function getHistory(content_type_id){
+    content_type_id = this.content_type_id;
+    var keyword = $('#keyword').val();
+
+    if(content_type_id==0){
+      if(keyword!=""){
+        var postData = { 
+          'nik'  : localStorage.getItem("username"),
+          'keyword'  : keyword
+        };
+      }else{
+        var postData = { 
+          'nik'  : localStorage.getItem("username")
+        };
+      }
+    }else{
+      if(keyword!=""){
+        var postData = { 
+          'nik'  : localStorage.getItem("username"),
+          'content_type_id'  : content_type_id,
+          'keyword'  : keyword
+        };
+      }else{
+        var postData = { 
+          'nik'  : localStorage.getItem("username"),
+          'content_type_id'  : content_type_id
+        };
+      }
+    }
+
+    $.ajax({ 
+      type      : 'GET', 
+      url       : backendurl + "/api/view_logs", 
+      data      : postData,
+      dataType  : 'json',
+      success   : function(datas) {
+        $('#loadingData').hide();
+        $('#historyList').empty();
+        $.each( datas, function( key, data ) {
+          $('#historyList').append(`<div class="col-lg-12 mb-3">
+            <div class="card shadow-sm">
+              <img src="${data.thumbnail}" class="card-img-top" alt="${data.name}" />
+              <div class="card-body">
+                <p class="text-category">${data.content_type}</p>
+                <p class="card-text text-title">${data.name}</p>
+                <p class="card-text text-date text-muted">Diakses ${data.last_update}</p>
+              </div>
+            </div>
+          </div>`);
+        });
+        if(datas.length==0){
+          $('#nodata').show();
+        }else{
+          $('#nodata').hide();
+        }
+      },
+      error: function (request, status, error) {
+        $('#loadingData').hide();
+        showErrMsg(request.responseText);
+        $('#nodata').show();
+      }
+    });
+  }
+</script>

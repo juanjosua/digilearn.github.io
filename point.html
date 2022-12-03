@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+
+  <!-- fontawesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+
+  <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+
+  <!-- custom css -->
+  <link rel="stylesheet" href="./css/custom.css" />
+  <!-- <script src="cordova.js"></script> -->
+
+  <!-- leaderboard css -->
+  <link rel="stylesheet" href="./css/leaderboard.css">
+
+  <style>
+    .container {
+      max-width: none !important;
+    }
+  </style>
+
+  <title>Home</title>
+</head>
+
+<body>
+
+  <!-- header -->
+  <div class="container p-0">
+    <div style="background-image: url('./assets/img/header-bg.png');">
+      <div class="text-center pt-2" style="font-size: smaller;">
+        <div id="back-button" class="position-absolute d-none align-items-center fs-1 ms-2"
+          onclick="document.location.reload(true);">
+          <i class="fa-solid fa-circle-chevron-left"></i>
+        </div>
+        <p class="m-0 h3">DigiPoint</p>
+        <!-- <img src="./assets/img/placeholders/ava.png" alt="Avatar" class="avatar"> -->
+        <p class="m-0 d-none"><span id="nik"></span></p>
+        <p class="m-0 d-none"><span id="fullname"></span></p>
+      </div>
+      <div class="row mx-2">
+        <div class="col my-2 d-flex align-items-center justify-content-center bg-light" style="border-radius: 10px;">
+          <div class="row">
+            <div class="col d-flex align-items-center justify-content-center">
+              <img src="./assets/img/trophy.png" alt="" width="50px">
+            </div>
+            <div class="col">
+              <span style="font-size: 10px">Peringkat</span><br>
+              <span class="d-flex align-items-center justify-content-center" style="font-size: 34px"
+                id="peringkat"></span>
+            </div>
+          </div>
+        </div>
+        <div class="col my-2 text-center bg-light offset-1" style="border-radius: 10px;" data-bs-toggle="modal"
+          data-bs-target="#exampleModal">
+          <div class="row border-bottom">
+            <div class="col d-flex align-items-center justify-content-center">
+              <img src="./assets/img/star.png" alt="" width="50px">
+            </div>
+            <div class="col">
+              <span style="font-size: 10px">Point</span><br>
+              <span style="font-size: 34px" id="total-point"></span>
+            </div>
+          </div>
+          <!-- <div class="row">
+            <small>Tap for history <i class="fa-solid fa-angle-right"></i></small>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- content -->
+  <div id="pagecontent" class="container p-2 pt-0 pb-5 bg-light">
+    <div id="leaderboards">
+      <div class="text-center bg-light py-2" style="font-size: 24px;">
+        Leaderboards
+      </div>
+      <div id="top-ten" class="col h-100" style="overflow-y: scroll; overflow-x: hidden;">
+      </div>
+    </div>
+    <hr id="hr">
+    <div id="earnings">
+      <div class="text-center bg-light py-2" style="font-size: 24px;">
+        Points
+      </div>
+      <div id="point-filter" class="row mb-3 mx-1 d-none">
+        <div class="col-4 dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Sort by
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li class="dropdown-item" onclick="filterBy('sort', 'poin-up');">Poin ↑</li>
+            <li class="dropdown-item" onclick="filterBy('sort', 'poin-down');">Poin ↓</li>
+            <li class="dropdown-item" onclick="filterBy('sort', 'tanggal-up');">Tanggal ↑</li>
+            <li class="dropdown-item" onclick="filterBy('sort', 'tanggal-down');">Tanggal ↓</li>
+          </ul>
+        </div>
+        <div class="col-4 dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Kategori
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li class="dropdown-item" onclick="filterBy('cat', 'emov');">E-Mov</li>
+            <li class="dropdown-item" onclick="filterBy('cat', 'ebook');">E-Book</li>
+            <li class="dropdown-item" onclick="filterBy('cat', 'epodcast');">E-Podcast</li>
+          </ul>
+        </div>
+        <div class="col-4 dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Waktu
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li class="dropdown-item" onclick="filterBy('time', 'today');">Hari Ini</li>
+            <li class="dropdown-item" onclick="filterBy('time', 'yesterday');">Kemarin</li>
+            <li class="dropdown-item" onclick="filterBy('time', 'last7');">7 Hari Terakhir</li>
+            <li class="dropdown-item" onclick="filterBy('time', 'last30');">30 Hari Terakhir</li>
+            <li class="dropdown-item" onclick="filterBy('time', 'last90');">90 Hari Terakhir</li>
+          </ul>
+        </div>
+      </div>
+      <div id="top-point" class="col h-100" style="overflow-y: scroll; overflow-x: hidden;">
+      </div>
+    </div>
+
+    <script type="text/javascript">
+
+      const filterBy = (filter, value) => {
+        document.getElementById('top-point').innerHTML = '';
+
+        // populate earnings
+        fetch(`http://192.168.0.100:8000/api/earnings?username=${localStorage.getItem("username")}&filter=${filter}&value=${value}`)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.length == 0) {
+              document.getElementById('top-point').innerHTML = `
+                <div class="col text-center">
+                  No data.
+                </div>
+              `;
+            } else {
+              data.forEach((value, index) => {
+                document.getElementById('top-point').innerHTML +=
+                  `
+                  <div class="row" onclick="openContent(${value.content_id}, ${value.content_type_id}, '${value.file}');">
+                      <div class="col text-center">
+                        <div class="row shadow mb-2 border rounded-3 mx-1 py-1">
+                          <div class="col-3">
+                            <img src="${value.thumbnail}" alt="" style="width: 100%;">
+                          </div>
+                          <div class="col-7">
+                            <div class="row"><small class="text-truncate">${value.name}</small></div>
+                            <div class="row"><small>${value.created_at}</small></div>
+                          </div>
+                          <div class="col-2">
+                            <div class="row d-flex justify-content-center align-items-center"><strong>Point</strong></div>
+                            <div class="row d-flex justify-content-center align-items-center"><strong>${value.point}</strong></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                `;
+              });
+            }
+          })
+      }
+
+      const openContent = (content_id, content_type_id, content_url) => {
+        localStorage.setItem("content_id", content_id);
+        localStorage.setItem("content_type_id", content_type_id);
+        localStorage.setItem("theurl", content_url);
+
+        if (content_type_id == 1) {
+          cid = 5;
+        } else if (content_type_id == 2) {
+          cid = 9;
+        } else if (content_type_id == 3) {
+          cid = 1;
+        }
+        localStorage.setItem("backurl", "index.html");
+        localStorage.setItem("fromindex", "1");
+        window.location.href = "channel.html?cid=" + cid;
+      }
+
+      const populateEarnings = () => {
+        document.getElementById('leaderboards').classList.add('d-none');
+        document.getElementById('hr').classList.add('d-none');
+        document.getElementById('back-button').classList.remove('d-none');
+        document.getElementById('back-button').classList.add('d-flex');
+        document.getElementById('point-filter').classList.remove('d-none');
+        document.getElementById('top-point').innerHTML = '';
+
+        // populate earnings
+        fetch(`http://192.168.0.100:8000/api/earnings?username=${localStorage.getItem("username")}`)
+          .then((response) => response.json())
+          .then((data) => {
+            data.forEach((value, index) => {
+              document.getElementById('top-point').innerHTML +=
+                `
+                <div class="row" onclick="openContent(${value.content_id}, ${value.content_type_id}, '${value.file}');">
+                    <div class="col text-center">
+                      <div class="row shadow mb-2 border rounded-3 mx-1 py-1">
+                        <div class="col-3">
+                          <img src="${value.thumbnail}" alt="" style="width: 100%;">
+                        </div>
+                        <div class="col-7">
+                          <div class="row"><small class="text-truncate">${value.name}</small></div>
+                          <div class="row"><small>${value.created_at}</small></div>
+                        </div>
+                        <div class="col-2">
+                          <div class="row d-flex justify-content-center align-items-center"><strong>Point</strong></div>
+                          <div class="row d-flex justify-content-center align-items-center"><strong>${value.point}</strong></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              `;
+            });
+          })
+      }
+
+      const populateLeaderboard = () => {
+        document.getElementById('earnings').classList.add('d-none');
+        document.getElementById('hr').classList.add('d-none');
+        document.getElementById('back-button').classList.remove('d-none');
+        document.getElementById('back-button').classList.add('d-flex');
+        document.getElementById('top-ten').innerHTML = '';
+
+        // populate leaderboard
+        fetch('http://192.168.0.100:8000/api/point10')
+          .then((response) => response.json())
+          .then((data) => {
+            data.forEach((value, index) => {
+              document.getElementById('top-ten').innerHTML +=
+                `
+                  <div class="row">
+                    <div class="col text-center">
+                      <div class="row shadow mb-3 border rounded-3 mx-1 py-1">
+                        <div class="col-3">
+                          <img src="./assets/img/placeholders/ava.png" alt="Avatar" class="mini-avatar">
+                        </div>
+                        <div class="col-4">
+                          <div class="row">${value.nik}</div>
+                          <div class="row text-truncate">${value.fullname}</div>
+                        </div>
+                        <div class="col-2" id="winner-medal">
+                          ${index == 0 ? '<img src="./assets/img/1st.png" alt="Avatar" class="mini-avatar">' : index == 1 ?
+                  '<img src="./assets/img/2nd.png" alt="Avatar" class="mini-avatar">' : index == 2 ?
+                    '<img src="./assets/img/3rd.png" alt="Avatar" class="mini-avatar">' : ''}
+                        </div>
+                        <div class="col-3">
+                          <div class="row d-flex justify-content-center align-items-center"><strong>Point</strong></div>
+                          <div class="row d-flex justify-content-center align-items-center"><strong>${value.POINT}</strong></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                `;
+            });
+          })
+      };
+
+      // first function to run
+      function Initpage() {
+        if (localStorage.getItem("token")) {
+          $('#fullname').text(localStorage.getItem("fullname"));
+          $('#nik').text(localStorage.getItem("username"));
+          if (localStorage.getItem("profileimageurl") != null) {
+            /*$('#theprofileimageurl').attr('src', localStorage.getItem("profileimageurl"));*/
+          }
+
+          // populate owned rank and points
+          fetch(`http://192.168.0.100:8000/api/point1?username=${localStorage.getItem("username")}`)
+            .then((response) => response.json())
+            .then((data) => {
+              document.getElementById('peringkat').innerText = data.rank + 1;
+              document.getElementById('total-point').innerText = data.point;
+            });
+
+          // populate leaderboard
+          fetch('http://192.168.0.100:8000/api/point10')
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.length == 0) {
+                document.getElementById('top-ten').innerHTML = `
+                      <div class="col text-center">
+                        No data.
+                      </div>
+                      `;
+              } else {
+                // populate top 3
+                data.forEach((value, index) => {
+                  if (index < 3) {
+                    document.getElementById('top-ten').innerHTML +=
+                      `
+                            <div class="row">
+                              <div class="col text-center">
+                                <div class="row shadow mb-2 border rounded-3 mx-1 py-1">
+                                  <div class="col-2">
+                                    <img src="./assets/img/placeholders/ava.png" alt="Avatar" class="mini-avatar">
+                                  </div>
+                                  <div class="col-5">
+                                    <div class="row">${value.nik}</div>
+                                    <div class="row text-truncate">${value.fullname}</div>
+                                  </div>
+                                  <div class="col-3" id="winner-medal">
+                                    ${index == 0 ? '<img src="./assets/img/1st.png" alt="Avatar" class="mini-avatar">' : index == 1 ?
+                        '<img src="./assets/img/2nd.png" alt="Avatar" class="mini-avatar">' : index == 2 ?
+                          '<img src="./assets/img/3rd.png" alt="Avatar" class="mini-avatar">' : ''}
+                                  </div>
+                                  <div class="col-2">
+                                    <div class="row d-flex justify-content-center align-items-center"><strong>Point</strong></div>
+                                    <div class="row d-flex justify-content-center align-items-center"><strong>${value.POINT}</strong></div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          `;
+                  }
+                });
+              };
+            }).then(() => {
+              // titik2
+              document.getElementById('top-ten').innerHTML +=
+                `
+                  <div class="row text-center mb-1"><i class="fa-sharp fa-solid fa-circle-dot"></i></div>
+                  <div class="row text-center mb-3"><i class="fa-sharp fa-solid fa-circle-dot"></i></div>
+                  <div class="row">
+                    <div class="col text-center">
+                      <div class="row shadow mb-2 border rounded-3 mx-1 py-1">
+                        <div class="col-2">
+                          <img src="./assets/img/placeholders/ava.png" alt="Avatar" class="mini-avatar">
+                        </div>
+                        <div class="col-5">
+                          <div class="row">${localStorage.getItem("username")}</div>
+                          <div class="row text-truncate">${localStorage.getItem("fullname")}</div>
+                        </div>
+                        <div class="col-3 d-flex align-items-center justify-content-center fs-3 p-0">
+                          ${document.getElementById('peringkat').innerText}th
+                        </div>
+                        <div class="col-2">
+                          <div class="row d-flex justify-content-center align-items-center"><strong>Point</strong></div>
+                          <div class="row d-flex justify-content-center align-items-center"><strong>${document.getElementById('total-point').innerText}</strong></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <a href="javascript:void(0)" onclick="populateLeaderboard();" class="row d-flex justify-content-center align-items-center">Tap for history</a>
+                `;
+            });
+
+          // populate earnings
+          fetch(`http://192.168.0.100:8000/api/earnings?username=${localStorage.getItem("username")}`)
+            .then((response) => response.json())
+            .then((data) => {
+              data.forEach((value, index) => {
+                if (index < 3) {
+                  document.getElementById('top-point').innerHTML += `
+                          <div class="row" onclick="openContent(${value.content_id}, ${value.content_type_id}, '${value.file}');">
+                              <div class="col text-center">
+                                <div class="row shadow mb-2 border rounded-3 mx-1 py-1">
+                                  <div class="col-3">
+                                    <img src="${value.thumbnail}" alt="" style="width: 100%;">
+                                  </div>
+                                  <div class="col-7">
+                                    <div class="row"><small class="text-truncate">${value.name}</small></div>
+                                    <div class="row"><small>${value.created_at}</small></div>
+                                  </div>
+                                  <div class="col-2">
+                                    <div class="row d-flex justify-content-center align-items-center"><strong>Point</strong></div>
+                                    <div class="row d-flex justify-content-center align-items-center"><strong>${value.point}</strong></div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                        `;
+                }
+              });
+            }).then(() => {
+              document.getElementById('top-point').innerHTML +=
+                `
+                  <a href="javascript:void(0)" onclick="populateEarnings();" class="row d-flex justify-content-center align-items-center">Tap for history</a>
+                `;
+            });
+        } else {
+          window.location.replace("login.html");
+        }
+      }
+    </script>
+  </div>
+  <!-- end content -->
+  </div>
+  <!-- end header -->
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Points</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="col" id="earnings" style="overflow-y: scroll; overflow-x: hidden;">
+            <!-- list point -->
+            <!-- end list point -->
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="navbar navbar-dark bg-white navbar-expand fixed-bottom d-md-none d-lg-none d-xl-none p-0">
+    <div class="row w-100 p-1" style="margin-left: 0;">
+      <div class="col text-center">
+        <a class="link-dark text-decoration-none col-sm" href="index.html">
+          <i class="fa fa-home" aria-hidden="true"></i>
+          <span style="font-size: smaller;" class="small d-block">Home</span>
+        </a>
+      </div>
+      <div class="col text-center">
+        <a class="link-dark text-decoration-none col-sm" href="history.html">
+          <i class="fa fa-history" aria-hidden="true"></i>
+          <span style="font-size: smaller;" class="small d-block">History</span>
+        </a>
+      </div>
+      <div class="col text-center">
+        <a class="link-dark text-decoration-none col-sm" href="point.html">
+          <i class="fa fa-star text-warning" aria-hidden="true"></i>
+          <span style="font-size: smaller;" class="small d-block">Point</span>
+        </a>
+      </div>
+      <div class="col text-center">
+        <a class="link-dark text-decoration-none col-sm" href="assignment.html">
+          <i class="fa fa-tasks" aria-hidden="true"></i>
+          <span style="font-size: smaller;" class="small d-block">Assign</span>
+        </a>
+      </div>
+      <div class="col text-center">
+        <a class="link-dark text-decoration-none col-sm" href="#" onclick="Logout();">
+          <i class="fa fa-sign-out" aria-hidden="true"></i>
+          <span style="font-size: smaller;" class="small d-block">Logout</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Optional JavaScript; choose one of the two! -->
+
+  <!-- jQuery -->
+  <script src="js/jquery/jquery.min.js"></script>
+  <!-- jQuery UI 1.11.4 -->
+  <script src="js/jquery-ui/jquery-ui.min.js"></script>
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+  <script type="text/javascript">
+    backendurl = "https://digilearn-webadmin.adira-corpu.com";
+
+    if (!localStorage.getItem("token")) {
+      window.location.replace("login.html");
+    }
+
+    $(window).ready(function () {
+      Init();
+    });
+
+    function getUrlVars() {
+      var vars = [], hash;
+      var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+      for (var i = 0; i < hashes.length; i++) {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+      }
+      return vars;
+    }
+
+    function Logout() {
+      localStorage.clear();
+      window.location.replace("login.html");
+    }
+
+    function Init() {
+      webservicesurl = "https://digilearn.adira-corpu.com/";
+
+      pages = ['home'];//0
+      pages.push("home");//1
+      pages.push("history");//2
+      pages.push("point");//3
+      pages.push("assignment");//4
+      pages.push("channel");//5
+      pages.push("search");//6
+
+      pageid = 1;
+      if (getUrlVars()["id"] != "") {
+        pageid = getUrlVars()["id"];
+      }
+
+      cid = 0;
+      if (getUrlVars()["cid"] != "") {
+        cid = getUrlVars()["cid"];
+      }
+      if (cid == undefined) {
+        cid = 0;
+      }
+
+      if (pageid == undefined) {
+        pageid = 1;
+      }
+
+      if (pageid.toString().includes('#')) {
+        pageid = pageid.toString().replace('#', '');
+      }
+
+      Initpage();
+
+      /*$('#pagecontent').load('pages/'+pages[pageid]+'.html', function() {
+        
+        Initpage();
+          
+      });*/
+    }
+  </script>
+
+</body>
+
+</html>

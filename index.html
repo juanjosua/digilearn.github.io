@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+  <!-- fontawesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+
+  <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+
+  <!-- custom css -->
+  <link rel="stylesheet" href="./css/custom.css" />
+  <link rel="stylesheet" href="./css/floating.css" />
+  <!-- <script src="cordova.js"></script> -->
+
+  <title>Home</title>
+</head>
+
+<body>
+  <a href="chat-bot.html" class="float mb-3 d-flex align-items-center justify-content-center">
+    <img class="my-float" src="./assets/img/digibot.png" alt="" srcset="" width="30px">
+  </a>
+
+  <!-- Bottom Navbar -->
+  <div class="container">
+    <nav class="navbar navbar-dark bg-white navbar-expand fixed-bottom d-md-none d-lg-none d-xl-none p-0">
+      <div class="row w-100 p-1" style="margin-left: 0;">
+        <div class="col text-center">
+          <a class="link-dark text-decoration-none col-sm" href="index.html">
+            <i class="fa fa-home" aria-hidden="true"></i>
+            <span style="font-size: smaller;" class="small d-block">Home</span>
+          </a>
+        </div>
+        <div class="col text-center">
+          <a class="link-dark text-decoration-none col-sm" href="history.html">
+            <i class="fa fa-history" aria-hidden="true"></i>
+            <span style="font-size: smaller;" class="small d-block">History</span>
+          </a>
+        </div>
+        <div class="col text-center">
+          <a class="link-dark text-decoration-none col-sm" href="point.html">
+            <i class="fa fa-star text-warning" aria-hidden="true"></i>
+            <span style="font-size: smaller;" class="small d-block">Point</span>
+          </a>
+        </div>
+        <div class="col text-center">
+          <a class="link-dark text-decoration-none col-sm" href="assignment.html">
+            <i class="fa fa-tasks" aria-hidden="true"></i>
+            <span style="font-size: smaller;" class="small d-block">Assign</span>
+          </a>
+        </div>
+        <div class="col text-center">
+          <a class="link-dark text-decoration-none col-sm" href="#" onclick="Logout();">
+            <i class="fa fa-sign-out" aria-hidden="true"></i>
+            <span style="font-size: smaller;" class="small d-block">Logout</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <!-- header -->
+  <div class="container" style="background-image: url(./assets/img/bg_header.png); max-width: none !important;">
+    <div class="row mx-1 position-relative" style="z-index: 2;">
+      <!-- Header -->
+      <div class="d-flex align-items-center justify-content-between header position-relative">
+        <div class="" style="font-size: smaller;">
+          Selamat datang, <br />
+          <b><span id="fullname"></span></b> <br />
+          <b><span id="nik"></span></b>
+        </div>
+        <div class="">
+          <img src="./assets/img/logo-corpu.png" alt="" width="100" />
+        </div>
+      </div>
+      <!-- end header -->
+      <!-- search box -->
+      <div class="row position-relative bg-white header search-bar">
+        <div class="col-1">
+          <i class="fas fa-search"></i>
+        </div>
+        <div class="col-11">
+          <input id="txtSearch" style="font-size: smaller" type="text" class="w-100 border-0 smaller"
+            placeholder="Cari materi yang kamu butuhkan disini..." />
+        </div>
+      </div>
+      <!-- end search box -->
+    </div>
+  </div>
+  <!-- end header -->
+
+  <!-- page contents -->
+  <div id="pagecontent" class="container bg-light position-absolute" style="z-index: 0; max-width: none !important;">
+
+    <!-- content -->
+    <div class="col content">
+
+      <!-- jumbotron -->
+      <div class="row mb-4 mt-4">
+        <div id="topbanner" class="w-100"></div>
+      </div>
+
+      <!-- menus -->
+      <div class="row m-0 d-flex justify-content-center">
+        <div id="loadingChannel" class="w-100 text-center">
+          <div class="lds-ellipsis">
+          </div>
+          <p class="p-0">sedang memuat...</p>
+        </div>
+        <div id="channel" class="row p-0" style="font-size: x-small;"></div>
+      </div>
+      <!-- end menus -->
+
+
+      <!-- konten terbaru -->
+      <div class="row my-2 mt-2">
+        <div><b>Konten Terbaru</b></div>
+        <!-- <div class="col text-end">
+          <a class="text-link" href="index.html?id=5">Lihat semua</a>
+        </div> -->
+      </div>
+
+      <div id="loadingLastContent" class="w-100 text-center">
+        <div class="lds-ellipsis">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <p class="p-0">sedang memuat...</p>
+      </div>
+
+      <div id="latestcontent" class="slider" style="overflow-y: hidden;">
+      </div>
+
+      <!-- end konten terbaru -->
+
+
+      <!-- konten populer -->
+      <div class="row my-2 mt-3">
+        <div><b>Konten Populer</b></div>
+        <!-- <div class="col text-end">
+          <a class="text-link" href="">Lihat semua</a>
+        </div> -->
+      </div>
+
+      <div id="loadingPopularContent" class="w-100 text-center">
+        <div class="lds-ellipsis">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <p class="p-0">sedang memuat...</p>
+      </div>
+
+      <div id="popularcontent" class="slider " style="overflow-y: hidden;">
+      </div>
+      <!-- end konten populer -->
+
+      <!-- konten like terbanyak -->
+      <div class="row my-2 mt-3">
+        <div><b>Konten Yang Paling Disukai</b></div>
+        <!-- <div class="col text-end">
+          <a class="text-link" href="">Lihat semua</a>
+        </div> -->
+      </div>
+      
+      <div id="loadingMostLikeContents" class="w-100 text-center">
+        <div class="lds-ellipsis">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <p class="p-0">sedang memuat...</p>
+      </div>
+      
+      <div id="mostLikeContents" class="slider " style="overflow-y: hidden;">
+      </div>
+      <!-- end konten like terbanyak -->
+
+      <!-- konten Favorit Kamu -->
+      <div class="row my-2 mt-3">
+        <div><b>Favorit Kamu</b></div>
+        <!-- <div class="col text-end">
+          <a class="text-link" href="">Lihat semua</a>
+        </div> -->
+      </div>
+
+      <div id="loadingFavoriteContent" class="w-100 text-center">
+        <div class="lds-ellipsis">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <p class="p-0">sedang memuat...</p>
+      </div>
+
+      <div id="favoritcontent" class="slider " style="overflow-y: hidden;">
+      </div>
+      <!-- end konten Favorit Kamu-->
+
+      <div class="mb-5">
+        <p>&nbsp</p>
+      </div>
+      <!-- end love button -->
+    </div>
+
+    <script type="text/javascript">
+      function Initpage() {
+
+        if (localStorage.getItem("token")) {
+          $('#fullname').text(localStorage.getItem("fullname"));
+          $('#nik').text(localStorage.getItem("username"));
+          if (localStorage.getItem("profileimageurl") != null) {
+            /*$('#theprofileimageurl').attr('src', localStorage.getItem("profileimageurl"));*/
+          }
+          $('#loadingChannel').hide();
+          $('#loadingLastContent').hide();
+          $('#loadingPopularContent').hide();
+          $('#loadingFavoriteContent').hide();
+
+          getChannel();
+          getLatestContent();
+          getPopularContent();
+          getFavoritContent();
+          getMostLikesContent();
+          getTopBanner();
+
+          $('#txtSearch').on('keyup', function (e) {
+            if (e.keyCode === 13) {
+              localStorage.setItem("keyword", $('#txtSearch').val());
+              window.location.replace("search.html");
+            }
+          });
+
+          // {
+          //   "url": "https://digilearn.adira-corpu.com/channel.html?cid=9",
+          //   "scheme": "https",
+          //   "host": "digilearn.adira-corpu.com",
+          //   "path": "/channel.html",
+          //   "params": {
+          //     "cid": "9"
+          //   },
+          //   "hash": ""
+          // }
+          // https://www.npmjs.com/package/cordova-plugin-deeplinks#application-launch-handling
+          universalLinks.subscribe('openContent', function (eventData) {
+            openContent(`${eventData.params.content_id}`, `${eventData.params.content_type_id}`, `${eventData.params.file}`);
+          });
+
+        } else {
+          window.location.replace("login.html");
+        }
+      }
+
+      function showErrMsg(msg) {
+
+      }
+
+      function hideErrMsg() {
+
+      }
+
+      function getChannel() {
+        $('#loadingChannel').show();
+        $.ajax({
+          type: 'GET',
+          url: backendurl + "/api/channels",
+          dataType: 'json',
+          success: function (datas) {
+            $('#loadingChannel').hide();
+            $('#channel').empty();
+            $.each(datas, function (key, data) {
+              $('#channel').append(`<div onclick="openChannel('${data.id}', '${data.name}', '${data.url}')" class="col-3 mb-2 text-center small">
+                    <img class="w-75" src="${data.thumbnail}" alt="${data.name}" />
+                    <p>${data.name}</p>
+                  </div>`);
+            });
+
+          },
+          error: function (request, status, error) {
+            $('#loadingChannel').hide();
+            showErrMsg(request.responseText);
+          }
+        });
+      }
+
+      function openChannel(id, channelName, url) {
+        window.location.href = `content.html?cid=${id}&channelName=${channelName}&url=${url}`;
+      }
+
+      function getLatestContent() {
+        /*var postData = { 
+          'content_type'  : 1,
+          'category_id'  : 1, 
+        };*/
+        $('#loadingLastContent').show();
+        $.ajax({
+          type: 'GET',
+          url: backendurl + "/api/contents",
+          dataType: 'json',
+          success: function (datas) {
+            $('#loadingLastContent').hide();
+            $('#latestcontent').empty();
+            $.each(datas, function (key, data) {
+
+              $('#latestcontent').append(`<div onclick="openContent(${data.id}, '${data.content_type_id}', '${data.file}')" class="card shadow-sm">
+                  <img
+                    src="${data.thumbnail}"
+                    class="card-img-top"
+                    alt="${data.name}"
+                    style="object-fit: cover;"
+                  />
+                  <div class="card-body">
+                    <p class="text-category">${data.content_type}</p>
+                    <p class="card-text text-title">${data.name}</p>
+                  </div>
+                </div>`);
+            });
+          },
+          error: function (request, status, error) {
+            $('#loadingLastContent').hide();
+            showErrMsg(request.responseText);
+          }
+        });
+      }
+
+      function getPopularContent() {
+        $('#loadingPopularContent').show();
+        var postData = {
+          'order_by': "views",
+        };
+
+        $.ajax({
+          type: 'GET',
+          url: backendurl + "/api/contents",
+          data: postData,
+          dataType: 'json',
+          success: function (datas) {
+            $('#loadingPopularContent').hide();
+            $('#popularcontent').empty();
+            $.each(datas, function (key, data) {
+              $('#popularcontent').append(`<div onclick="openContent(${data.id}, '${data.content_type_id}', '${data.file}')" class="card shadow-sm">
+                  <img
+                    src="${data.thumbnail}"
+                    class="card-img-top"
+                    alt="${data.name}"
+                    style="object-fit: cover;"
+                  />
+                  <div class="card-body">
+                    <p class="text-category">${data.content_type}</p>
+                    <p class="card-text text-title">${data.name}</p>
+                  </div>
+                </div>`);
+            });
+
+          },
+          error: function (request, status, error) {
+            $('#loadingPopularContent').hide();
+            showErrMsg(request.responseText);
+          }
+        });
+      }
+
+      const getMostLikesContent = () => {
+        fetch(`http://192.168.0.100:8000/api/most_like`)
+          .then((response) => response.json())
+          .then((data) => {
+            // console.log(data);
+            $('#loadingMostLikeContents').hide();
+            $('#mostLikeContents').empty();
+            $.each(data, function (key, d) {
+              $('#mostLikeContents').append(`<div onclick="openContent(${d.content_id}, '${d.content_type_id}', '${d.file}')" class="card shadow-sm">
+                  <img
+                    src="${d.thumbnail}"
+                    class="card-img-top"
+                    alt="${d.name}"
+                    style="object-fit: cover;"
+                  />
+                  <div class="card-body">
+                    <p class="text-category">${d.content_type}</p>
+                    <p class="card-text text-title">${d.name}</p>
+                  </div>
+                </div>`);
+            });
+          });
+      }
+
+      function openContent(content_id, content_type_id, theurl) {
+        localStorage.setItem("content_id", content_id);
+        localStorage.setItem("content_type_id", content_type_id);
+        localStorage.setItem("theurl", theurl);
+
+        if (content_type_id == 1) {
+          cid = 5;
+        } else if (content_type_id == 2) {
+          cid = 9;
+        } else if (content_type_id == 3) {
+          cid = 1;
+        }
+        localStorage.setItem("backurl", "index.html");
+        localStorage.setItem("fromindex", "1");
+        window.location.href = "channel.html?cid=" + cid;
+      }
+
+      function getFavoritContent() {
+        $('#loadingFavoriteContent').show();
+        var postData = {
+          'favorite': "views",
+          'nik': localStorage.getItem("username")
+        };
+        $.ajax({
+          type: 'GET',
+          url: backendurl + "/api/view_logs",
+          data: postData,
+          dataType: 'json',
+          success: function (datas) {
+            $('#loadingFavoriteContent').hide();
+            $('#favoritcontent').empty();
+            $.each(datas, function (key, data) {
+              $('#favoritcontent').append(`<div onclick="openContent(${data.id}, '${data.content_type_id}', '${data.file}')" class="card shadow-sm">
+                  <img
+                    src="${data.thumbnail}"
+                    class="card-img-top"
+                    alt="${data.name}"
+                    style="object-fit: cover;"
+                  />
+                  <div class="card-body">
+                    <p class="text-category">${data.content_type}</p>
+                    <p class="card-text text-title">${data.name}</p>
+                  </div>
+                </div>`);
+            });
+
+          },
+          error: function (request, status, error) {
+            $('#loadingFavoriteContent').hide();
+            console.log(error);
+            showErrMsg(request.responseText);
+          }
+        });
+      }
+
+      function getTopBanner() {
+        $.ajax({
+          type: 'GET',
+          url: backendurl + "/api/e-lives",
+          dataType: 'json',
+          success: function (datas) {
+            if (datas.length > 0) {
+              $.each(datas, function (key, data) {
+                $('#topbanner').append(`<div class="col-12"><a href="${data.url}" >
+                      <img class="img-fluid" src="${data.thumbnail}" /></a>
+                    </div>`);
+              });
+            } else {
+              var postData = {
+                'action': "loadRiskProfile",
+                'userid': localStorage.getItem("userid"),
+              };
+              var theurl = "https://www.adira-corpu.com/040116adbavi_adi/enhanchment3/homecontent_v2.5.php";
+
+              $.ajax({
+                type: 'POST',
+                url: theurl,
+                data: postData,
+                crossDomain: true,
+                cache: false,
+                success: function (data) {
+                  if (data) {
+                    data = data.replace("95", "100");
+                    $('#topbanner').append(`<div class="col-12"><a href="assignment.html">
+                          ${data}
+                        </a></div>`);
+                  } else {
+                    showErrMsg(request.responseText);
+                  }
+                },
+                error: function (request, status, error) {
+                  showErrMsg(request.responseText);
+                }
+              });
+            }
+
+          },
+          error: function (request, status, error) {
+            showErrMsg(request.responseText);
+          }
+        });
+
+
+      }
+    </script>
+  </div>
+
+  <!-- Optional JavaScript; choose one of the two! -->
+
+  <!-- jQuery -->
+  <script src="js/jquery/jquery.min.js"></script>
+  <!-- jQuery UI 1.11.4 -->
+  <script src="js/jquery-ui/jquery-ui.min.js"></script>
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+  <script type="text/javascript">
+    //TODO: backendurl = "https://digilearn-webadmin.adira-corpu.com";
+    backendurl = "http://192.168.0.100:8000";
+
+    if (!localStorage.getItem("token")) {
+      window.location.replace("login.html");
+    }
+
+    $(window).ready(function () {
+      Init();
+    });
+
+    function getUrlVars() {
+      var vars = [], hash;
+      var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+      for (var i = 0; i < hashes.length; i++) {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+      }
+      return vars;
+    }
+
+    function Logout() {
+      localStorage.clear();
+      window.location.replace("login.html");
+    }
+
+    function Init() {
+      //TODO: webservicesurl = "https://digilearn.adira-corpu.com/";
+      webservicesurl = "http://192.168.0.100:8000/";
+
+      pages = ['home'];//0
+      pages.push("home");//1
+      pages.push("history");//2
+      pages.push("point");//3
+      pages.push("assignment");//4
+      pages.push("channel");//5
+      pages.push("search");//6
+
+      pageid = 1;
+      if (getUrlVars()["id"] != "") {
+        pageid = getUrlVars()["id"];
+      }
+
+      cid = 0;
+      if (getUrlVars()["cid"] != "") {
+        cid = getUrlVars()["cid"];
+      }
+      if (cid == undefined) {
+        cid = 0;
+      }
+
+      if (pageid == undefined) {
+        pageid = 1;
+      }
+
+      if (pageid.toString().includes('#')) {
+        pageid = pageid.toString().replace('#', '');
+      }
+
+      Initpage();
+
+      /*$('#pagecontent').load('pages/'+pages[pageid]+'.html', function() {
+        
+        Initpage();
+          
+      });*/
+    }
+  </script>
+
+  <!-- Option 2: Separate Popper and Bootstrap JS -->
+  <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    -->
+</body>
+
+</html>

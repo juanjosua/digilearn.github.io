@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+
+  <!-- fontawesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+
+  <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+
+  <!-- custom css -->
+  <link rel="stylesheet" href="./css/custom.css" />
+  <!-- <script src="cordova.js"></script> -->
+
+  <!-- leaderboard css -->
+  <link rel="stylesheet" href="./css/chat.css">
+
+  <style>
+    .container {
+      max-width: none !important;
+    }
+  </style>
+
+  <title>Chatbot</title>
+</head>
+
+<body>
+
+  <!-- header -->
+  <div class="container p-0">
+    <div style="background-image: url('./assets/img/header-bg.png');">
+      <div class="text-center py-2" style="font-size: smaller;">
+        <div class="position-absolute d-flex align-items-center fs-1 ms-2" onclick="history.back();">
+          <i class="fa-solid fa-circle-chevron-left"></i>
+        </div>
+        <p class="m-0 h3">Chatbot</p>
+        <!-- <img src="./assets/img/placeholders/ava.png" alt="Avatar" class="avatar"> -->
+        <p class="m-0 d-none"><span id="nik"></span></p>
+        <p class="m-0 d-none"><span id="fullname"></span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- content -->
+  <div id="pagecontent" class="container px-2 py-3 overflow-auto">
+    <small>Selamat siang,</small><br>
+    <b>Ada yang bisa kami bantu?</b>
+    <div class="my-4 d-flex align-items-center">
+      <i class="fas fa-search position-absolute ms-2"></i>
+      <input type="text" class="form-control" id="searchbox" placeholder="Ketik kata kunci (misal: Digilearn)"
+        style="border-radius: 10px; padding-left: 30px;">
+    </div>
+    <div class="mb-4 d-none" id="search-results"></div>
+
+    <div id="below-search">
+      <div id="faq">
+        <div class="mb-3"><b>Yang sering ditanyakan</b></div>
+        <div class="mb-4" id="top-questions"></div>
+      </div>
+
+      <div class="mb-3"><b>Pilih topik sesuai kendalamu</b></div>
+      <div id="channel" class="row p-0 w-100 m-0" style="font-size: x-small; margin-bottom: 10vh !important;">
+        <!-- <div class="col-3 mb-2 text-center small" onclick="topic('E-Book')">
+          <img id="icon-E-Book" class="w-75" src="https://digilearn-webadmin.adira-corpu.com/img/channel/ebook.png"
+            alt="e-Book">
+          <p>e-Book</p>
+        </div>
+        <div class="col-3 mb-2 text-center small" onclick="topic('E-Play')">
+          <img id="icon-E-Play" class="w-75" src="https://digilearn-webadmin.adira-corpu.com/img/channel/eplay.png"
+            alt="e-Play">
+          <p>e-Play</p>
+        </div>
+        <div class="col-3 mb-2 text-center small" onclick="topic('E-Mov')">
+          <img id="icon-E-Mov" class="w-75" src="https://digilearn-webadmin.adira-corpu.com/img/channel/emov.png"
+            alt="e-Mov">
+          <p>e-Mov</p>
+        </div>
+        <div class="col-3 mb-2 text-center small" onclick="topic('E-FMA')">
+          <img id="icon-E-FMA" class="w-75" src="https://digilearn-webadmin.adira-corpu.com/img/channel/efma.png"
+            alt="e-FMA">
+          <p>e-FMA</p>
+        </div>
+        <div class="col-3 mb-2 text-center small" onclick="topic('E-Podcast')">
+          <img id="icon-E-Podcast" class="w-75"
+            src="https://digilearn-webadmin.adira-corpu.com/img/channel/epodcast.png" alt="e-Podcast">
+          <p>e-Podcast</p>
+        </div>
+        <div class="col-3 mb-2 text-center small" onclick="topic('E-Bosque')">
+          <img id="icon-E-Bosque" class="w-75" src="https://digilearn-webadmin.adira-corpu.com/img/channel/ebosque.png"
+            alt="e-Bosque">
+          <p>e-Bosque</p>
+        </div>
+        <div class="col-3 mb-2 text-center small" onclick="topic('Innobox')">
+          <img id="icon-Innobox" class="w-75" src="https://digilearn-webadmin.adira-corpu.com/img/channel/innobox.webp"
+            alt="Innobox">
+          <p>Innobox</p>
+        </div> -->
+      </div>
+      <div class="d-none" id="faq-topic">
+        <div class="mb-3"><b>Yang sering ditanyakan</b></div>
+        <div class="mb-4" id="faq-topic-questions">
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+  <!-- end content -->
+  </div>
+  <!-- end header -->
+
+  <div class="fixed-bottom px-2 py-2 row d-flex justify-content-center" style="background-color: transparent;">
+    <img src="./assets/img/chatbot-banner.png" alt="" onclick="window.location = 'chat-room-bot.html'">
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Answer</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modal-answer">
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- jQuery -->
+  <script src="js/jquery/jquery.min.js"></script>
+  <!-- jQuery UI 1.11.4 -->
+  <script src="js/jquery-ui/jquery-ui.min.js"></script>
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"></script>
+
+  <script>
+    //setup before functions
+    let typingTimer;                //timer identifier
+    let doneTypingInterval = 1000;  //time in ms (5 seconds)
+    let myInput = document.getElementById('searchbox');
+
+    myInput.addEventListener('keydown', () => {
+      document.getElementById('below-search').classList.add('d-none');
+      document.getElementById('search-results').classList.remove('d-none');
+      document.getElementById('search-results').innerHTML = `<div class='w-100 d-flex justify-content-center align-items-center'>Searching...</div>`;
+    })
+
+    //on keyup, start the countdown
+    myInput.addEventListener('keyup', () => {
+      clearTimeout(typingTimer);
+      if (myInput.value) {
+        typingTimer = setTimeout(search, doneTypingInterval);
+      } else {
+        document.getElementById('below-search').classList.remove('d-none');
+        document.getElementById('search-results').classList.add('d-none');
+      }
+    });
+
+    const search = () => {
+      let keyword = document.getElementById('searchbox').value;
+
+      // load top questions
+      fetch(`http://192.168.0.100:8000/api/helpdigilearn/search?keyword=${encodeURIComponent(keyword)}`)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.length > 0) {
+            document.getElementById('search-results').innerHTML = "";
+            data.forEach((d) => {
+              document.getElementById('search-results').innerHTML += `<small onclick="add_counter(${d.id}, '${d.answer}');" data-bs-toggle="modal" data-bs-target="#exampleModal">${d.question}</small><br>
+              <hr>`;
+            })
+          } else {
+            document.getElementById('search-results').innerHTML = `<div class='w-100 d-flex justify-content-center align-items-center'>No data.</div>`;
+          }
+        });
+    };
+
+    const topic = (id) => {
+      //remove margin bottom from channel div
+      document.getElementById('channel').style = 'margin-bottom: none;';
+
+      document.getElementById('faq-topic-questions').innerHTML = `<div class='w-100 d-flex justify-content-center align-items-center'>Searching...</div>`;
+
+      document.getElementById('faq').classList.add('d-none');
+      document.getElementById('faq-topic').classList.remove('d-none');
+      let imgs = document.querySelectorAll("[id^='icon']");
+      imgs.forEach(i => {
+        if (i.id == `icon-${id}`) {
+          document.getElementById(i.id).style = "transform: scale(1.1)";
+          document.getElementById(i.id).parentNode.setAttribute("onclick", `resetTopic('${id}')`);
+        } else {
+          document.getElementById(i.id).style = "transform: scale(0.9); filter: grayscale(100%)";
+          document.getElementById(i.id).parentNode.setAttribute("onclick", `topic('${i.id.replace('icon-', '')}')`);
+        }
+      });
+
+      let keyword = id;
+
+      // load top questions
+      fetch(`http://192.168.0.100:8000/api/helpdigilearn/search/channel?channel=${encodeURIComponent(keyword)}`)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.length > 0) {
+            document.getElementById('faq-topic-questions').innerHTML = "";
+            document.getElementById('faq-topic-questions').style = "margin-bottom: 10vh !important;";
+            data.forEach((d) => {
+              document.getElementById('faq-topic-questions').innerHTML += `<small onclick="add_counter(${d.id}, '${d.answer}');" data-bs-toggle="modal" data-bs-target="#exampleModal">${d.question}</small><br>
+              <hr>`;
+            })
+          } else {
+            document.getElementById('faq-topic-questions').innerHTML = `<div class='w-100 d-flex justify-content-center align-items-center'>No data.</div>`;
+          }
+        });
+    };
+
+    const resetTopic = (id) => {
+      document.getElementById('channel').style = 'margin-bottom: 10vh !important;';
+      document.getElementById('faq').classList.remove('d-none');
+      document.getElementById('faq-topic').classList.add('d-none');
+      let imgs = document.querySelectorAll("[id^='icon']");
+      imgs.forEach(i => {
+        if (i.id == `icon-${id}`) {
+          document.getElementById(i.id).parentNode.setAttribute("onclick", `topic('${id}')`);
+        }
+        document.getElementById(i.id).style = "transform: scale(1); filter: none;";
+      });
+    };
+
+    const add_counter = (id, answer) => {
+      document.getElementById('modal-answer').innerText = answer;
+      fetch(`http://192.168.0.100:8000/api/faq/counter?id=${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          //
+        });
+    };
+  </script>
+
+  <script type="text/javascript">
+    // first function to run
+    function Initpage() {
+      if (localStorage.getItem("token")) {
+
+        document.getElementById('top-questions').innerHTML = `<div class='w-100 d-flex justify-content-center align-items-center'>Searching...</div>`;
+
+        // load top questions
+        fetch(`http://192.168.0.100:8000/api/general_top_questions`)
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById('top-questions').innerHTML = "";
+            if (data.length > 0) {
+              data.forEach((d, i) => {
+                document.getElementById('top-questions').innerHTML += `
+              <small onclick="add_counter(${d.id}, '${d.answer}');" data-bs-toggle="modal" data-bs-target="#exampleModal">${d.question}</small><br>
+              <hr>
+            `;
+              });
+            } else {
+              document.getElementById('top-questions').innerHTML += `<div class='w-100 d-flex justify-content-center align-items-center'>No data.</div>`;;
+            }
+
+          });
+
+        // load topics
+        fetch(`http://192.168.0.100:8000/api/faq_topics`)
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById('channel').innerHTML = "";
+            data.forEach((d, i) => {
+              document.getElementById('channel').innerHTML += `
+                <div class="col-3 mb-2 text-center small" onclick="topic('${d.name}')">
+                  <img id="icon-${d.name}" class="w-75" src="${d.thumbnail}"
+                    alt="${d.name}">
+                  <p>${d.name}</p>
+                </div>
+              `;
+            });
+          });
+
+      } else {
+        window.location.replace("login.html");
+      }
+    }
+  </script>
+
+  <script type="text/javascript">
+    backendurl = "https://digilearn-webadmin.adira-corpu.com";
+
+    if (!localStorage.getItem("token")) {
+      window.location.replace("login.html");
+    }
+
+    $(window).ready(function () {
+      Init();
+    });
+
+    function getUrlVars() {
+      var vars = [], hash;
+      var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+      for (var i = 0; i < hashes.length; i++) {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+      }
+      return vars;
+    }
+
+    function Logout() {
+      localStorage.clear();
+      window.location.replace("login.html");
+    }
+
+    function Init() {
+      webservicesurl = "https://digilearn.adira-corpu.com/";
+
+      pages = ['home'];//0
+      pages.push("home");//1
+      pages.push("history");//2
+      pages.push("point");//3
+      pages.push("assignment");//4
+      pages.push("channel");//5
+      pages.push("search");//6
+
+      pageid = 1;
+      if (getUrlVars()["id"] != "") {
+        pageid = getUrlVars()["id"];
+      }
+
+      cid = 0;
+      if (getUrlVars()["cid"] != "") {
+        cid = getUrlVars()["cid"];
+      }
+      if (cid == undefined) {
+        cid = 0;
+      }
+
+      if (pageid == undefined) {
+        pageid = 1;
+      }
+
+      if (pageid.toString().includes('#')) {
+        pageid = pageid.toString().replace('#', '');
+      }
+
+      Initpage();
+
+      /*$('#pagecontent').load('pages/'+pages[pageid]+'.html', function() {
+        
+        Initpage();
+          
+      });*/
+    }
+  </script>
+
+</body>
+
+</html>

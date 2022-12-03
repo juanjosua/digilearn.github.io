@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+
+  <!-- fontawesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+
+  <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+
+  <!-- custom css -->
+  <link rel="stylesheet" href="./css/custom.css" />
+  <!-- <script src="cordova.js"></script> -->
+
+  <!-- leaderboard css -->
+  <link rel="stylesheet" href="./css/chat.css">
+
+  <style>
+    .container {
+      max-width: none !important;
+    }
+  </style>
+
+  <title>Chatbot</title>
+</head>
+
+<body style="background-color: #f5f5f5;">
+
+  <!-- header -->
+  <div class="container fixed-top p-0">
+    <div style="background-image: url('./assets/img/header-bg.png');">
+      <div class="text-center py-2" style="font-size: smaller;">
+        <div class="position-absolute d-flex align-items-center fs-1 ms-2" onclick="history.back();">
+          <i class="fa-solid fa-circle-chevron-left"></i>
+        </div>
+        <p class="m-0 h3">Chatbot</p>
+        <!-- <img src="./assets/img/placeholders/ava.png" alt="Avatar" class="avatar"> -->
+        <p class="m-0 d-none"><span id="nik"></span></p>
+        <p class="m-0 d-none"><span id="fullname"></span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- content -->
+  <div id="pagecontent" class="container px-2 py-3 my-4 overflow-auto">
+    <!-- expert style bubble -->
+    <div class="row mx-2 mt-3">
+      <div class="border-0 bg-white pe-3 py-2 w-75" style="border-radius: 0px 30px 30px 30px;">
+        <small id="greetings"></small>
+      </div>
+    </div>
+
+    <!-- user style bubble -->
+    <div class="row mx-2 mt-3 d-flex justify-content-end">
+      <div class="border-0 ps-3 py-2 mb-3 w-75" style="border-radius: 30px 0px 30px 30px;">
+        <div id="choice_bubble" class="col d-grid gap-2">
+          <div class="row d-flex justify-content-center fs-14">Hal yang ingin ditanyakan :</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end content -->
+  </div>
+  <!-- end header -->
+
+  <!-- <div class="fixed-bottom px-2 py-1 row" style="background-color: #ffd101;">
+    <div class="col-10 d-flex align-items-center pe-0">
+      <input class="w-100 rounded border-0 px-3" type="text" name="" id="message" style="height: 38px;"
+        placeholder="Ketik pesan Anda...">
+    </div>
+    <div class="btn btn-transparent col-auto" onclick="sendMessage();">
+      <img src="./assets/img/send.png" alt="" srcset="" height="30px">
+    </div>
+  </div> -->
+
+  <!-- jQuery -->
+  <script src="js/jquery/jquery.min.js"></script>
+  <!-- jQuery UI 1.11.4 -->
+  <script src="js/jquery-ui/jquery-ui.min.js"></script>
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"></script>
+
+  <script type="text/javascript">
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    var interlocutors = urlParams.get('username');
+
+    // Example POST method implementation:
+    async function postQuestion(url = '', data = {}) {
+      // Default options are marked with *
+      const response = await fetch(url, {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+          'Content-Type': 'application/json'
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: 'follow', // manual, *follow, error
+        referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        body: JSON.stringify(data) // body data type must match "Content-Type" header
+      });
+      return response.json(); // parses JSON response into native JavaScript objects
+    }
+
+    const sendMessage = () => {
+
+      postQuestion('http://192.168.0.100:8000/api/send_chat', {
+        receiver: interlocutors,
+        sender: localStorage.getItem('username'),
+        message: document.getElementById('message').value,
+        sender_fullname: localStorage.getItem('fullname'),
+        sender_position: localStorage.getItem('position'),
+      })
+        .then((data) => {
+          // console.log(data); // JSON data parsed by `data.json()` call
+          document.getElementById('message').value = '';
+        });
+
+    };
+
+    const startChat = () => {
+      // greetings
+      let date = new Date();
+      document.getElementById('greetings').innerHTML = `
+        Halo ${localStorage.getItem('fullname')}, semoga hari kamu menyenangkan ya. Ada yang bisa Digibot bantu? 
+      `;
+
+      // fetch(`http://192.168.0.100:8000/api/chatbot_options`)
+      //   .then((response) => response.json())
+      //   .then((data) => {
+      //     data.forEach((d, i) => {
+      //       document.getElementById('choice_bubble').innerHTML += `
+      //         <div class="row"><button class="btn fs-14" style="background-color: #ffd101;" onclick="chooseOption(${i});">${d.option}</button>
+      //     </div>
+      //       `;
+      //     });
+      //   });
+
+      // load top questions
+      fetch(`http://192.168.0.100:8000/api/general_top_questions`)
+        .then((response) => response.json())
+        .then((data) => {
+          data.forEach((d, i) => {
+            document.getElementById('choice_bubble').innerHTML += `
+                  <div class="row"><button class="btn fs-14" style="background-color: #ffd101;" onclick="displayAnswer(${d.id},'${d.answer}');">${d.question}</button>
+              </div>
+            `;
+          });
+          document.getElementById('choice_bubble').innerHTML += `
+                <div class="row"><button class="btn fs-14" style="background-color: #ffd101;" onclick="displayAnswer(null, 'other')">Other</button>
+            </div>
+          `;
+        }).then(() => {
+          scrollToBottom();
+        });
+    };
+
+    const add_counter = (id) => {
+      fetch(`http://192.168.0.100:8000/api/faq/counter?id=${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          //
+        });
+    };
+
+    const displayAnswer = (id, answer) => {
+      if (id) {
+        add_counter(id);
+      }
+
+      if (answer == 'other') {
+        document.getElementById('pagecontent').innerHTML += `
+        <div class="row mx-2">
+          <div class="border-0 bg-white pe-3 py-2 w-75" style="border-radius: 0px 30px 30px 30px;">
+            <small>Silakan pilih topik pertanyaan kamu.</small>
+          </div>
+        </div>`;
+        return chooseTopics();
+      }
+
+      document.getElementById('pagecontent').innerHTML += `
+      <div class="row mx-2">
+        <div class="border-0 bg-white pe-3 py-2 w-75" style="border-radius: 0px 30px 30px 30px;">
+          <small>${answer}</small>
+        </div>
+      </div>
+
+      <div class="row mx-2 mt-3 d-flex justify-content-end">
+        <div class="border-0 ps-3 py-2 mb-3 w-75" style="border-radius: 30px 0px 30px 30px;">
+          <div class="col d-grid gap-2">
+            <div class="row d-flex justify-content-center fs-14">Apakah jawaban Digibot sudah membantu?</div>
+            <div class="row"><button onclick="sudah();" class="btn fs-14" style="background-color: #ffd101;">Sudah</button></div>
+            <div class="row"><button onclick="belum();" class="btn fs-14" style="background-color: #ffd101;">Belum</button></div>
+          </div>
+        </div>
+      </div>
+      `;
+      scrollToBottom();
+    }
+
+    const displayQuestions = (topic) => {
+      let date = new Date().getTime();
+      document.getElementById('pagecontent').innerHTML += `
+        <div class="row mx-2">
+          <div class="border-0 bg-white pe-3 py-2 w-75" style="border-radius: 0px 30px 30px 30px;">
+            <small>Silakan pertanyaan yang ingin kamu tanyakan.</small>
+          </div>
+        </div>`;
+
+      document.getElementById('pagecontent').innerHTML +=
+        `<div class="row mx-2 mt-3 d-flex justify-content-end">
+          <div class="border-0 ps-3 py-2 mb-3 w-75" style="border-radius: 30px 0px 30px 30px;">
+            <div id="${date}" class="col d-grid gap-2">
+            </div>
+          </div>
+        </div>`;
+
+      // load top questions
+      fetch(`http://192.168.0.100:8000/api/helpdigilearn/search/channel?channel=${encodeURIComponent(topic)}&limit=10`)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.length > 0) {
+            data.forEach((d, i) => {
+              document.getElementById(date).innerHTML += `
+                  <div class="row"><button class="btn fs-14" style="background-color: #ffd101;" onclick="displayAnswer(${d.id}, '${d.answer}');">${d.question}</button>
+                  </div>
+                `;
+            });
+          } else {
+            document.getElementById('pagecontent').innerHTML += `
+            <div class="row mx-2">
+              <div class="border-0 bg-white pe-3 py-2 w-75" style="border-radius: 0px 30px 30px 30px;">
+                <small>Mohon maaf, saat ini tidak tersedia pertanyaan pada topik yang kamu pilih. Mohon memilih topik lainnya. Terima kasih.</small>
+              </div>
+            </div>`;
+            belum();
+          }
+        }).then(() => {
+          scrollToBottom();
+        });
+    }
+
+    const chooseTopics = () => {
+      let date = new Date().getTime();
+      document.getElementById('pagecontent').innerHTML +=
+        `<div class="row mx-2 mt-3 d-flex justify-content-end">
+          <div class="border-0 ps-3 py-2 mb-3 w-75" style="border-radius: 30px 0px 30px 30px;">
+            <div id="${date}" class="col d-grid gap-2">
+            </div>
+          </div>
+        </div>`;
+
+      fetch(`http://192.168.0.100:8000/api/show_topics`)
+        .then((response) => response.json())
+        .then((data) => {
+          data.forEach((d, i) => {
+            document.getElementById(date).innerHTML += `
+                  <div class="row"><button class="btn fs-14" style="background-color: #ffd101;" onclick="displayQuestions('${d.name}');">${d.name}</button>
+              </div>
+            `;
+          });
+        }).then(() => {
+          scrollToBottom();
+        });
+    }
+
+    const chooseOption = (i) => {
+      fetch(`http://192.168.0.100:8000/api/chatbot_options?id=${i + 1}`)
+        .then((response) => response.json())
+        .then((data) => {
+          data.forEach((d, i) => {
+            document.getElementById('pagecontent').innerHTML += `
+            <div class="row mx-2 d-flex justify-content-end">
+              <div class="border-0 ps-3 py-2 mb-3 w-75" style="border-radius: 30px 0px 30px 30px; background-color: #ffd101;">
+                <small>${d.question}</small>
+              </div>
+            </div>
+
+            <div class="row mx-2">
+              <div class="border-0 bg-white pe-3 py-2 w-75" style="border-radius: 0px 30px 30px 30px;">
+                <small>${d.answer}</small>
+              </div>
+            </div>
+
+            <div class="row mx-2 mt-3 d-flex justify-content-end">
+              <div class="border-0 ps-3 py-2 mb-3 w-75" style="border-radius: 30px 0px 30px 30px;">
+                <div class="col d-grid gap-2">
+                  <div class="row d-flex justify-content-center fs-14">Apakah jawaban Digibot sudah membantu?</div>
+                  <div class="row"><button onclick="sudah();" class="btn fs-14" style="background-color: #ffd101;">Sudah</button></div>
+                  <div class="row"><button onclick="belum();" class="btn fs-14" style="background-color: #ffd101;">Belum</button></div>
+                </div>
+              </div>
+            </div>
+            `;
+          });
+        }).then(() => {
+          scrollToBottom();
+        });
+    };
+
+    const scrollToBottom = () => {
+      // let chatBox = document.getElementById('pagecontent');
+      // chatBox.scrollTop = chatBox.scrollHeight;
+
+      document.getElementById('pagecontent').scrollIntoView(false);
+    }
+
+    // disable all onclick event after user done with the bot
+    const handler = (e) => {
+      if (e.target.tagName == "BUTTON") {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+    }
+
+    const sudah = () => {
+      document.getElementById('pagecontent').innerHTML += `
+        <div class="row mx-2">
+          <div class="border-0 bg-white pe-3 py-2 w-75" style="border-radius: 0px 30px 30px 30px;">
+            <small>Terima kasih sudah menggunakan Digibot. Semoga harimu menyenangkan!</small>
+          </div>
+        </div>
+      `;
+
+      scrollToBottom();
+      document.addEventListener("click", handler, true);
+    }
+
+    const belum = () => {
+      let date = new Date().getTime();
+      document.getElementById('pagecontent').innerHTML +=
+        `<div class="row mx-2 mt-3 d-flex justify-content-end">
+          <div class="border-0 ps-3 py-2 mb-3 w-75" style="border-radius: 30px 0px 30px 30px;">
+            <div id="${date}" class="col d-grid gap-2">
+              <div class="row d-flex justify-content-center fs-14">Hal yang ingin ditanyakan :</div>
+            </div>
+          </div>
+        </div>`;
+
+      // fetch(`http://192.168.0.100:8000/api/chatbot_options`)
+      //   .then((response) => response.json())
+      //   .then((data) => {
+      //     data.forEach((d, i) => {
+      //       document.getElementById(date).innerHTML += `
+      //         <div class="row"><button class="btn fs-14" style="background-color: #ffd101;" onclick="chooseOption(${i});">${d.option}</button>
+      //     </div>
+      //       `;
+      //     });
+      //   }).then(() => {
+      //     scrollToBottom();
+      //   });
+
+      fetch(`http://192.168.0.100:8000/api/general_top_questions`)
+        .then((response) => response.json())
+        .then((data) => {
+          data.forEach((d, i) => {
+            document.getElementById(date).innerHTML += `
+                  <div class="row"><button class="btn fs-14" style="background-color: #ffd101;" onclick="displayAnswer(${d.id},'${d.answer}');">${d.question}</button>
+              </div>
+            `;
+          });
+          document.getElementById(date).innerHTML += `
+                <div class="row"><button class="btn fs-14" style="background-color: #ffd101;" onclick="displayAnswer(null, 'other')">Other</button>
+            </div>
+          `;
+        }).then(() => {
+          scrollToBottom();
+        });
+    }
+
+    // first function to run
+    function Initpage() {
+      if (localStorage.getItem("token")) {
+        startChat();
+      } else {
+        window.location.replace("login.html");
+      }
+    }
+  </script>
+
+  <script type="text/javascript">
+    backendurl = "https://digilearn-webadmin.adira-corpu.com";
+
+    if (!localStorage.getItem("token")) {
+      window.location.replace("login.html");
+    }
+
+    $(window).ready(function () {
+      Init();
+    });
+
+    function getUrlVars() {
+      var vars = [], hash;
+      var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+      for (var i = 0; i < hashes.length; i++) {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+      }
+      return vars;
+    }
+
+    function Logout() {
+      localStorage.clear();
+      window.location.replace("login.html");
+    }
+
+    function Init() {
+      webservicesurl = "https://digilearn.adira-corpu.com/";
+
+      pages = ['home'];//0
+      pages.push("home");//1
+      pages.push("history");//2
+      pages.push("point");//3
+      pages.push("assignment");//4
+      pages.push("channel");//5
+      pages.push("search");//6
+
+      pageid = 1;
+      if (getUrlVars()["id"] != "") {
+        pageid = getUrlVars()["id"];
+      }
+
+      cid = 0;
+      if (getUrlVars()["cid"] != "") {
+        cid = getUrlVars()["cid"];
+      }
+      if (cid == undefined) {
+        cid = 0;
+      }
+
+      if (pageid == undefined) {
+        pageid = 1;
+      }
+
+      if (pageid.toString().includes('#')) {
+        pageid = pageid.toString().replace('#', '');
+      }
+
+      Initpage();
+
+      /*$('#pagecontent').load('pages/'+pages[pageid]+'.html', function() {
+        
+        Initpage();
+          
+      });*/
+    }
+  </script>
+
+</body>
+
+</html>
