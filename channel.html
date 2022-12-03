@@ -689,8 +689,11 @@
   <!-- share content -->
   <script>
     const shareContent = () => {
-      parent.share(`https://digilearn.adira-corpu.com/channel.html?channel_id=${getUrlVars()['cid']}&content_id=${localStorage.getItem('content_id')}&file=${localStorage.getItem("theurl")}`, `${document.getElementById('title').innerText}`);
+      let msg = [`https://digilearn.adira-corpu.com/channel.html?channel_id=${getUrlVars()['cid']}&content_id=${localStorage.getItem('content_id')}&file=${localStorage.getItem("theurl")}`, `${document.getElementById('title').innerText}`];
+      // parent.share(`https://digilearn.adira-corpu.com/channel.html?channel_id=${getUrlVars()['cid']}&content_id=${localStorage.getItem('content_id')}&file=${localStorage.getItem("theurl")}`, `${document.getElementById('title').innerText}`);
+      parent.postMessage(msg, "*");
     }
+
   </script>
 </body>
 
