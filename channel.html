@@ -689,7 +689,7 @@
   <!-- share content -->
   <script>
     const shareContent = () => {
-      navigator.share(`https://digilearn.adira-corpu.com/channel.html?channel_id=${getUrlVars()['cid']}&content_id=${localStorage.getItem('content_id')}&file=${localStorage.getItem("theurl")}`, `${document.getElementById('title').innerText}`);
+      parent.share(`https://digilearn.adira-corpu.com/channel.html?channel_id=${getUrlVars()['cid']}&content_id=${localStorage.getItem('content_id')}&file=${localStorage.getItem("theurl")}`, `${document.getElementById('title').innerText}`);
     }
   </script>
 </body>
