@@ -118,7 +118,7 @@
 
     const sendMessage = () => {
 
-      postQuestion('http://192.168.0.100:8000/api/send_chat', {
+      postQuestion('http://165.22.107.85/api/send_chat', {
         receiver: interlocutors,
         sender: localStorage.getItem('username'),
         message: document.getElementById('message').value,
@@ -139,7 +139,7 @@
         Halo ${localStorage.getItem('fullname')}, semoga hari kamu menyenangkan ya. Ada yang bisa Digibot bantu? 
       `;
 
-      // fetch(`http://192.168.0.100:8000/api/chatbot_options`)
+      // fetch(`http://165.22.107.85/api/chatbot_options`)
       //   .then((response) => response.json())
       //   .then((data) => {
       //     data.forEach((d, i) => {
@@ -151,7 +151,7 @@
       //   });
 
       // load top questions
-      fetch(`http://192.168.0.100:8000/api/general_top_questions`)
+      fetch(`http://165.22.107.85/api/general_top_questions`)
         .then((response) => response.json())
         .then((data) => {
           data.forEach((d, i) => {
@@ -170,7 +170,7 @@
     };
 
     const add_counter = (id) => {
-      fetch(`http://192.168.0.100:8000/api/faq/counter?id=${id}`)
+      fetch(`http://165.22.107.85/api/faq/counter?id=${id}`)
         .then((response) => response.json())
         .then((data) => {
           //
@@ -230,7 +230,7 @@
         </div>`;
 
       // load top questions
-      fetch(`http://192.168.0.100:8000/api/helpdigilearn/search/channel?channel=${encodeURIComponent(topic)}&limit=10`)
+      fetch(`http://165.22.107.85/api/helpdigilearn/search/channel?channel=${encodeURIComponent(topic)}&limit=10`)
         .then((response) => response.json())
         .then((data) => {
           if (data.length > 0) {
@@ -264,7 +264,7 @@
           </div>
         </div>`;
 
-      fetch(`http://192.168.0.100:8000/api/show_topics`)
+      fetch(`http://165.22.107.85/api/show_topics`)
         .then((response) => response.json())
         .then((data) => {
           data.forEach((d, i) => {
@@ -279,7 +279,7 @@
     }
 
     const chooseOption = (i) => {
-      fetch(`http://192.168.0.100:8000/api/chatbot_options?id=${i + 1}`)
+      fetch(`http://165.22.107.85/api/chatbot_options?id=${i + 1}`)
         .then((response) => response.json())
         .then((data) => {
           data.forEach((d, i) => {
@@ -351,7 +351,7 @@
           </div>
         </div>`;
 
-      // fetch(`http://192.168.0.100:8000/api/chatbot_options`)
+      // fetch(`http://165.22.107.85/api/chatbot_options`)
       //   .then((response) => response.json())
       //   .then((data) => {
       //     data.forEach((d, i) => {
@@ -364,7 +364,7 @@
       //     scrollToBottom();
       //   });
 
-      fetch(`http://192.168.0.100:8000/api/general_top_questions`)
+      fetch(`http://165.22.107.85/api/general_top_questions`)
         .then((response) => response.json())
         .then((data) => {
           data.forEach((d, i) => {

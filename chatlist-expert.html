@@ -97,7 +97,7 @@
 
   <script type="text/javascript">
     const loadChatList = () => {
-      fetch(`http://192.168.0.100:8000/api/chatlist?username=${localStorage.getItem('username')}`)
+      fetch(`http://165.22.107.85/api/chatlist?username=${localStorage.getItem('username')}`)
         .then((response) => response.json())
         .then((data) => {
           // console.log(data)

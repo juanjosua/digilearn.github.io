@@ -115,7 +115,7 @@
 
     <script type="text/javascript">
         const loadTopics = () => {
-            fetch(`http://192.168.0.100:8000/api/topics`)
+            fetch(`http://165.22.107.85/api/topics`)
                 .then((response) => response.json())
                 .then((data) => {
                     data.forEach((d, i) => {
@@ -125,7 +125,7 @@
                         <hr>
                         `;
 
-                        fetch(`http://192.168.0.100:8000/api/experts?category=${d.name}&limit=3`)
+                        fetch(`http://165.22.107.85/api/experts?category=${d.name}&limit=3`)
                             .then((response) => response.json())
                             .then((data2) => {
                                 data2.forEach(d2 => {
@@ -136,7 +136,7 @@
                                     if ((start.getTime() < now.getTime()) && (now.getTime() < end.getTime())) {
                                         document.getElementById(i).innerHTML +=
                                             `<a href="profile.html?username=${d2.nik}&expert_id=${d2.id}&topic=${d.name}"><div class="text-center">
-                                            <img src="${d2.photo ?? 'http://192.168.0.100:8000/img/default/avatar.png'}"
+                                            <img src="${d2.photo ?? 'http://165.22.107.85/img/default/avatar.png'}"
                                                 alt="" width="73px">
                                             <div class="text-center">${d2.fullname}</div>
                                             <div class="text-center" style="color: green;">Online</div>
@@ -144,7 +144,7 @@
                                     } else {
                                         document.getElementById(i).innerHTML +=
                                         `<a href="profile.html?username=${d2.nik}&expert_id=${d2.id}&topic=${d.name}"><div class="text-center">
-                                            <img src="${d2.photo ?? 'http://192.168.0.100:8000/img/default/avatar.png'}"
+                                            <img src="${d2.photo ?? 'http://165.22.107.85/img/default/avatar.png'}"
                                                 alt="" width="73px">
                                             <div class="text-center">${d2.fullname}</div>
                                         </div></a>`;

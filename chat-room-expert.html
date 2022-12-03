@@ -117,7 +117,7 @@
 
     const sendMessage = () => {
 
-      postQuestion('http://192.168.0.100:8000/api/send_chat', {
+      postQuestion('http://165.22.107.85/api/send_chat', {
         receiver: interlocutors,
         sender: localStorage.getItem('username'),
         message: document.getElementById('message').value,
@@ -134,7 +134,7 @@
     const startChat = () => {
       // greetings
       let date = new Date();
-      document.getElementById('profpic').src = 'http://192.168.0.100:8000/img/default/avatar.png';
+      document.getElementById('profpic').src = 'http://165.22.107.85/img/default/avatar.png';
 
       // document.getElementById('pagecontent').innerHTML = `
       // <div class="row mx-2 mt-2 d-flex justify-content-end">
@@ -147,7 +147,7 @@
 
       let msg_id = 0;
       setInterval(() => {
-        fetch(`http://192.168.0.100:8000/api/retrieve_chat?receiver=${interlocutors}&sender=${localStorage.getItem('username')}&msg_id=${msg_id}`)
+        fetch(`http://165.22.107.85/api/retrieve_chat?receiver=${interlocutors}&sender=${localStorage.getItem('username')}&msg_id=${msg_id}`)
           .then((response) => response.json())
           .then((data) => {
             if (document.getElementById('fullname').innerText == '') {
